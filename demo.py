@@ -169,6 +169,11 @@ float2 cmul(float2 a, float2 b)
     return cnew(mad(-a.y, b.y, a.x * b.x), mad(a.y, b.x, a.x * b.y));
 }
 
+float2 cconj(float2 a)
+{
+    return cnew(a.x, -a.y);
+}
+
 float2 Y(int m, int l, float theta, float phi)
 {
     float rootFirst = (2.0 * l + 1.0) / (4 * 3.1415926);
@@ -205,8 +210,9 @@ __kernel void density(__global float * xyz, __global float ipsi,
     psi = cmul(cmul(cexp(cnew(-(r / n * a), 0.0)),
                     cnew(pow((float)(2.0 * r) / (n * a), (float)l), 0.0)),
                cnew(L(2 * l + 1, n - l - 1, ((2.0 * r) / (n * a))), 0.0));
+    psi = cmul(cmul(psi, Y(m, l, theta, phi)), cnew(ipsi, 0.0));
 
-    output[gid] = cmul(psi, Y(m, l, theta, phi)).x * ipsi;
+    output[gid] = cmul(cconj(psi), psi).x;
 }
 """).build()
 
