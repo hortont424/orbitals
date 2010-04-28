@@ -132,13 +132,13 @@ int fact(int n)
 {
     int f = 1;
 
-    while (n > 1)
+    /*while (n > 1)
     {
         f = f * n;
         n = n - 1;
-    }
+    }*/
 
-    return f;
+    return n;
 }
 
 float2 cnew(float x, float y)
@@ -177,7 +177,7 @@ float2 Y(int m, int l, float theta, float phi)
     float2 eiStuff = cmul(cexp(cmul(csqrtf(-1), m * phi)),
                           cnew(P(m, l, native_cos(theta)), 0.0));
 
-    return cmul(root, eiStuff);
+    return cnew(rootSecond, rootSecond);//cmul(root, eiStuff);
 }
 
 __kernel void density(__global float * xyz, __global float ipsi,
