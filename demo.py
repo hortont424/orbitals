@@ -3,15 +3,15 @@ import pyopencl as cl
 import numpy
 
 ctx = cl.Context(dev_type=cl.device_type.GPU)
-print ctx.get_info(cl.context_info.DEVICES)
+#print ctx.get_info(cl.context_info.DEVICES)
 queue = cl.CommandQueue(ctx)
 
-pointCount = 100
-n = numpy.int32(1)
-l = numpy.int32(0)
+pointCount = 10000
+n = numpy.int32(2)
+l = numpy.int32(1)
 m = numpy.int32(0)
 
-xyz = 6 * numpy.random.rand(3 * pointCount).astype(numpy.float32) - 3
+xyz = 10 * numpy.random.rand(3 * pointCount).astype(numpy.float32) - 5
 output = numpy.zeros(pointCount).astype(numpy.float32)
 
 mf = cl.mem_flags
@@ -112,7 +112,7 @@ float P(int a, int b, float x)
         else if(b == 2)
             return 0.0;
         else if(b == 3)
-            return -15.0 * pow(1.0 - (x * x), (3.0 / 2.0));
+            return -15.0 * pow((float)1.0f - (x * x), (float)(3.0f / 2.0f));
     }
 }
 
@@ -189,6 +189,8 @@ __kernel void density(__global float * xyz, __global float ipsi,
 
     float theta, phi, r;
     float4 pos = {0, 0, 0, 0};
+    float a = 1.0;
+    float2 psi;
 
     // use vector load?
     pos.x = xyz[(gid * 3) + 0];
@@ -200,7 +202,11 @@ __kernel void density(__global float * xyz, __global float ipsi,
     theta = acos(pos.z / r);
     phi = atan2(pos.y, pos.x);
 
-    output[gid] = Y(2,2,.3,.5).x;
+    psi = cmul(cmul(cexp(cnew(-(r / n * a), 0.0)),
+                    cnew(pow((float)(2.0 * r) / (n * a), (float)l), 0.0)),
+               cnew(L(2 * l + 1, n - l - 1, ((2.0 * r) / (n * a))), 0.0));
+
+    output[gid] = cmul(psi, Y(m, l, theta, phi)).x * ipsi;
 }
 """).build()
 
@@ -214,4 +220,7 @@ def independentPsi(n, l):
 ipsi = numpy.float32(independentPsi(n, l))
 prg.density(queue, [pointCount], xyz_buf, ipsi, n, l, m, dest_buf)
 cl.enqueue_read_buffer(queue, dest_buf, output).wait()
-print output
+
+for i in range(0, pointCount):
+    print "{0},{1},{2},{3}".format(output[i], xyz[(i * 3) + 0],
+                                   xyz[(i * 3) + 1], xyz[(i * 3) + 2])
