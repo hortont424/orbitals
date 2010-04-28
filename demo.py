@@ -1,4 +1,5 @@
 from math import *
+from time import time
 import pyopencl as cl
 import numpy
 
@@ -6,7 +7,7 @@ ctx = cl.Context(dev_type=cl.device_type.GPU)
 #print ctx.get_info(cl.context_info.DEVICES)
 queue = cl.CommandQueue(ctx)
 
-pointCount = 10000
+pointCount = 5000000
 n = numpy.int32(2)
 l = numpy.int32(1)
 m = numpy.int32(0)
@@ -223,10 +224,15 @@ def independentPsi(n, l):
 
     return sqrt(rootFirst * rootSecond)
 
-ipsi = numpy.float32(independentPsi(n, l))
-prg.density(queue, [pointCount], xyz_buf, ipsi, n, l, m, dest_buf)
-cl.enqueue_read_buffer(queue, dest_buf, output).wait()
+def doDensity():
+    ipsi = numpy.float32(independentPsi(n, l))
+    prg.density(queue, [pointCount], xyz_buf, ipsi, n, l, m, dest_buf)
+    #cl.enqueue_read_buffer(queue, dest_buf, output).wait()
 
-for i in range(0, pointCount):
-    print "{0},{1},{2},{3}".format(output[i], xyz[(i * 3) + 0],
-                                   xyz[(i * 3) + 1], xyz[(i * 3) + 2])
+before = time()
+doDensity()
+print time() - before
+
+#for i in range(0, pointCount):
+#    print "{0},{1},{2},{3}".format(output[i], xyz[(i * 3) + 0],
+#                                   xyz[(i * 3) + 1], xyz[(i * 3) + 2])
