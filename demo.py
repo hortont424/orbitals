@@ -120,11 +120,11 @@ float EP(float m)
 {
     if(m >= 0)
     {
-        return -1.0 / m;
+        return pow(-1.0f, m);
     }
     else
     {
-        return 1;
+        return 1.0;
     }
 }
 
@@ -198,7 +198,7 @@ __kernel void density(__global float * xyz, __global float ipsi,
     theta = acos(pos.z / r);
     phi = atan2(pos.y, pos.x);
 
-    output[gid] = Y(1,1,.3,.5).x;
+    output[gid] = Y(2,2,.3,.5).x;
 }
 """).build()
 
