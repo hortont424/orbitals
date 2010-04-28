@@ -116,6 +116,70 @@ float P(int a, int b, float x)
     }
 }
 
+float EP(float m)
+{
+    if(m >= 0)
+    {
+        return 1.0 / m;
+    }
+    else
+    {
+        return 1;
+    }
+}
+
+int fact(int n)
+{
+    int f = 1;
+
+    while (n > 1)
+    {
+        f = f * n;
+        n = n - 1;
+    }
+
+    return f;
+}
+
+float2 cnew(float x, float y)
+{
+    float2 c;
+    c.x = x;
+    c.y = y;
+    return c;
+}
+
+float2 csqrtf(float a)
+{
+    if(a < 0.0)
+        return cnew(0.0, sqrtf(-a));
+    else
+        return cnew(sqrtf(a), 0.0);
+}
+
+float2 cexp(float2 a)
+{
+    float module = exp(a.x);
+    float angle = a.y;
+    return cnew(module * native_cos(angle), module * native_sin(angle));
+}
+
+float2 cmul(float2 a, float2 b)
+{
+    return cnew(mad(-a.y, b.y, a.x * b.x), mad(a.y, b.x, a.x * b.y));
+}
+
+float2 Y(int m, int l, float theta, float phi)
+{
+    float rootFirst = (2.0 * l + 1.0) / (4 * 3.1415926);
+    float rootSecond = fact(l - abs(m)) / fact(l + abs(m));
+    float2 root = csqrtf(rootFirst * rootSecond);
+    float2 eiStuff = cmul(cexp(cmul(csqrtf(-1), m * phi)),
+                          cnew(P(m, l, native_cos(theta)), 0.0));
+
+    return cmul(root, eiStuff);
+}
+
 __kernel void density(__global float * xyz, __global float ipsi,
                       __global int n, __global int l,
                       __global int m, __global float * output)
@@ -137,7 +201,7 @@ __kernel void density(__global float * xyz, __global float ipsi,
 
 
 
-    output[gid] = P(1,2,.5);
+    output[gid] = Y(0,0,.3,.5).x;
 }
 """).build()
 
