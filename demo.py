@@ -85,7 +85,7 @@ float P(int a, int b, float x)
         if(b == 0)
             return 0.0;
         else if(b == 1)
-            return -sqrt(1.0 - (x * x));
+            return -sqrt((float)1.0 - (x * x));
         else if(b == 2)
             return (-3.0 * x) * sqrt((float)1.0 - (x * x));
         else if(b == 3)
@@ -120,7 +120,7 @@ float EP(float m)
 {
     if(m >= 0)
     {
-        return 1.0 / m;
+        return -1.0 / m;
     }
     else
     {
@@ -128,17 +128,20 @@ float EP(float m)
     }
 }
 
-int fact(int n)
+float fact(float n)
 {
-    int f = 1;
+    float f = 1.0;
 
-    /*while (n > 1)
+    if(n <= 0.0)
+        return 1.0;
+
+    while (n > 1.0)
     {
         f = f * n;
-        n = n - 1;
-    }*/
+        n = n - 1.0;
+    }
 
-    return n;
+    return f;
 }
 
 float2 cnew(float x, float y)
@@ -151,10 +154,10 @@ float2 cnew(float x, float y)
 
 float2 csqrtf(float a)
 {
-    if(a < 0.0)
-        return cnew(0.0, sqrtf(-a));
-    else
-        return cnew(sqrtf(a), 0.0);
+    if(a <= 0.0)
+        return cnew(0.0, sqrt(a * -1.0f));
+
+    return cnew(sqrt(a), 0.0);
 }
 
 float2 cexp(float2 a)
@@ -173,11 +176,10 @@ float2 Y(int m, int l, float theta, float phi)
 {
     float rootFirst = (2.0 * l + 1.0) / (4 * 3.1415926);
     float rootSecond = fact(l - abs(m)) / fact(l + abs(m));
-    float2 root = csqrtf(rootFirst * rootSecond);
-    float2 eiStuff = cmul(cexp(cmul(csqrtf(-1), m * phi)),
+    float2 root = cmul(cnew(EP(m), 0.0), csqrtf(rootFirst * rootSecond));
+    float2 eiStuff = cmul(cexp(cnew(0.0, m * phi)),
                           cnew(P(m, l, native_cos(theta)), 0.0));
-
-    return cnew(rootSecond, rootSecond);//cmul(root, eiStuff);
+    return eiStuff; cmul(root, eiStuff);
 }
 
 __kernel void density(__global float * xyz, __global float ipsi,
@@ -201,7 +203,7 @@ __kernel void density(__global float * xyz, __global float ipsi,
 
 
 
-    output[gid] = Y(0,0,.3,.5).x;
+    output[gid] = Y(1,1,.3,.5).y;
 }
 """).build()
 
