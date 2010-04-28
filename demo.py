@@ -136,10 +136,7 @@ float fact(float n)
         return 1.0;
 
     while (n > 1.0)
-    {
-        f = f * n;
-        n = n - 1.0;
-    }
+        f *= n--;
 
     return f;
 }
@@ -179,7 +176,7 @@ float2 Y(int m, int l, float theta, float phi)
     float2 root = cmul(cnew(EP(m), 0.0), csqrtf(rootFirst * rootSecond));
     float2 eiStuff = cmul(cexp(cnew(0.0, m * phi)),
                           cnew(P(m, l, native_cos(theta)), 0.0));
-    return eiStuff; cmul(root, eiStuff);
+    return cmul(root, eiStuff);
 }
 
 __kernel void density(__global float * xyz, __global float ipsi,
@@ -201,9 +198,7 @@ __kernel void density(__global float * xyz, __global float ipsi,
     theta = acos(pos.z / r);
     phi = atan2(pos.y, pos.x);
 
-
-
-    output[gid] = Y(1,1,.3,.5).y;
+    output[gid] = Y(1,1,.3,.5).x;
 }
 """).build()
 
