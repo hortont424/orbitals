@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     10290,        313]
-NotebookOptionsPosition[      9888,        295]
-NotebookOutlinePosition[     10226,        310]
-CellTagsIndexPosition[     10183,        307]
+NotebookDataLength[     10312,        313]
+NotebookOptionsPosition[      9910,        295]
+NotebookOutlinePosition[     10248,        310]
+CellTagsIndexPosition[     10205,        307]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -225,7 +225,7 @@ Cell[BoxData[
         Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
   Function[BoxForm`e$, 
    MatrixForm[BoxForm`e$]]]], "Output",
- CellChangeTimes->{3.481425333262113*^9}]
+ CellChangeTimes->{3.481425333262113*^9, 3.481427417244742*^9}]
 }, Open  ]],
 
 Cell[BoxData[{
@@ -312,9 +312,9 @@ Notebook[{
 Cell[545, 20, 4953, 155, 297, "Input"],
 Cell[CellGroupData[{
 Cell[5523, 179, 898, 19, 27, "Input"],
-Cell[6424, 200, 861, 27, 95, "Output"]
+Cell[6424, 200, 883, 27, 95, "Output"]
 }, Open  ]],
-Cell[7300, 230, 2584, 63, 73, "Input"]
+Cell[7322, 230, 2584, 63, 73, "Input"]
 }
 ]
 *)

@@ -179,6 +179,8 @@ float2 Y(int m, int l, float theta, float phi)
     return cmul(root, eiStuff);
 }
 
+
+
 __kernel void density(__global float * xyz, __global float ipsi,
                       __global int n, __global int l,
                       __global int m, __global float * output)
