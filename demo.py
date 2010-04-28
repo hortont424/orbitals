@@ -87,9 +87,10 @@ float P(int a, int b, float x)
         else if(b == 1)
             return -sqrt(1.0 - (x * x));
         else if(b == 2)
-            return - (3.0 * x) * sqrt(1.0 - (x * x));
+            return (-3.0 * x) * sqrt((float)1.0 - (x * x));
         else if(b == 3)
-            return - (3.0 / 2.0) * sqrt(1.0 - (x * x)) * (-1 + (5 * x * x));
+            return - (3.0 / 2.0) * sqrt((float)1.0 - (x * x)) *
+                (-1.0 + (5.0 * x * x));
     }
     else if(a == 2)
     {
@@ -105,11 +106,11 @@ float P(int a, int b, float x)
     else if(a == 3)
     {
         if(b == 0)
-            return 0;
+            return 0.0;
         else if(b == 1)
-            return 0;
+            return 0.0;
         else if(b == 2)
-            return 0;
+            return 0.0;
         else if(b == 3)
             return -15.0 * pow(1.0 - (x * x), (3.0 / 2.0));
     }
@@ -136,7 +137,7 @@ __kernel void density(__global float * xyz, __global float ipsi,
 
 
 
-    output[gid] = L(3,2,2);
+    output[gid] = P(1,2,.5);
 }
 """).build()
 
