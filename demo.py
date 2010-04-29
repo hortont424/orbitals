@@ -2,6 +2,7 @@ from math import *
 from time import time
 import pyopencl as cl
 import numpy
+from PIL import Image
 
 mf = cl.mem_flags
 
@@ -201,14 +202,18 @@ __kernel void density(__global float ipsi,
     int index;
 
     // Find coordinates in image from global ID
-    index = floor((float)gid / 300.0f);
-    imgpos.x = index % 300;
-    imgpos.y = floor((float)index / 300.0f);
+    index = floor((float)gid / 200.0f);
+    imgpos.x = index % 200;
+    imgpos.y = floor((float)index / 200.0f);
 
     // Find coordinates in atomic coordinate space from image coordinates
-    pos.x = ((float)imgpos.x / 300.0) - 150.0;
-    pos.y = ((float)imgpos.y / 300.0) - 150.0;
-    pos.z = (gid % 300) - 150.0;
+    pos.x = ((float)imgpos.x / 200.0) - 0.5;
+    pos.y = ((float)imgpos.y / 200.0) - 0.5;
+    pos.z = ((gid % 200) / 200.0) - 0.5;
+
+    pos.x *= 5;
+    pos.y *= 5;
+    pos.z *= 2;
 
     // Convert cartesian coordinates to spherical
     r = length(pos);
@@ -222,7 +227,7 @@ __kernel void density(__global float ipsi,
 
     psiStarPsi = cmul(cconj(psi), psi).x;
 
-    output[imgpos.x + (imgpos.y * 300)] += (psiStarPsi * 10000.0);
+    output[imgpos.x + (imgpos.y * 200)] = (psiStarPsi * 100000.0);
 }
 """).build()
 
@@ -241,6 +246,10 @@ def doDensity():
 before = time()
 doDensity()
 print time() - before
+
+img = Image.new("L", (200, 200))
+img.putdata(output)
+img.show()
 
 #for i in range(0, pointCount):
 #    print "{0},{1},{2},{3}".format(output[i], xyz[(i * 3) + 0],
