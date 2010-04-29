@@ -7,15 +7,15 @@ from PIL import Image
 mf = cl.mem_flags
 
 ctx = cl.Context(dev_type=cl.device_type.GPU)
-#print ctx.get_info(cl.context_info.DEVICES)
+print ctx.get_info(cl.context_info.DEVICES)
 queue = cl.CommandQueue(ctx)
 
-pointCount = 200 * 200
+pointCount = 400 * 400
 n = numpy.int32(2)
 l = numpy.int32(1)
 m = numpy.int32(0)
 
-output = numpy.zeros(200 * 200).astype(numpy.float32)
+output = numpy.zeros(400 * 400).astype(numpy.float32)
 output_buf = cl.Buffer(ctx, mf.READ_WRITE | mf.COPY_HOST_PTR, hostbuf=output)
 
 prg = cl.Program(ctx, """
@@ -184,9 +184,6 @@ float2 Y(int m, int l, float theta, float phi)
     return cmul(root, eiStuff);
 }
 
-const sampler_t samp = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP |
-    CLK_FILTER_NEAREST;
-
 __kernel void density(__global float ipsi,
                       __global int n, __global int l,
                       __global int m, __global float * output)
@@ -201,11 +198,11 @@ __kernel void density(__global float ipsi,
     float psiStarPsi;
 
     // Find coordinates in image from global ID
-    imgpos.x = gid % 200;
-    imgpos.y = floor((float)gid / 200.0f);
+    imgpos.x = gid % 400;
+    imgpos.y = floor((float)gid / 400.0f);
 
-    pos.x = ((float)imgpos.x / 200.0) - 0.5;
-    pos.z = ((imgpos.y % 200) / 200.0) - 0.5;
+    pos.x = ((float)imgpos.x / 400.0) - 0.5;
+    pos.z = ((imgpos.y % 400) / 400.0) - 0.5;
 
     pos.x *= 0.15;
     pos.z *= 0.15;
@@ -227,7 +224,7 @@ __kernel void density(__global float ipsi,
 
         psiStarPsi = cmul(cconj(psi), psi).x;
 
-        output[imgpos.x + (imgpos.y * 200)] += psiStarPsi;
+        output[imgpos.x + (imgpos.y * 400)] += psiStarPsi;
     }
 }
 """).build()
@@ -252,10 +249,6 @@ scaleFactor = 255.0 / max(output)
 for i in range(0, len(output)):
     output[i] *= scaleFactor
 
-img = Image.new("L", (200, 200))
+img = Image.new("L", (400, 400))
 img.putdata(output)
 img.show()
-
-#for i in range(0, pointCount):
-#    print "{0},{1},{2},{3}".format(output[i], xyz[(i * 3) + 0],
-#                                   xyz[(i * 3) + 1], xyz[(i * 3) + 2])
