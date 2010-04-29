@@ -6,13 +6,13 @@ from PIL import Image
 
 mf = cl.mem_flags
 
-ctx = cl.Context(dev_type=cl.device_type.CPU)
+ctx = cl.Context(dev_type=cl.device_type.GPU)
 #print ctx.get_info(cl.context_info.DEVICES)
 queue = cl.CommandQueue(ctx)
 
-pointCount = 200 * 200 * 200
-n = numpy.int32(2)
-l = numpy.int32(1)
+pointCount = 200 * 200
+n = numpy.int32(1)
+l = numpy.int32(0)
 m = numpy.int32(0)
 
 output = numpy.zeros(200 * 200).astype(numpy.float32)
@@ -199,35 +199,37 @@ __kernel void density(__global float ipsi,
     float a = 1.0;
     float2 psi;
     float psiStarPsi;
-    int index;
 
     // Find coordinates in image from global ID
-    index = floor((float)gid / 200.0f);
-    imgpos.x = index % 200;
-    imgpos.y = floor((float)index / 200.0f);
+    imgpos.x = gid % 200;
+    imgpos.y = floor((float)gid / 200.0f);
 
-    // Find coordinates in atomic coordinate space from image coordinates
     pos.x = ((float)imgpos.x / 200.0) - 0.5;
-    pos.y = ((float)imgpos.y / 200.0) - 0.5;
-    pos.z = ((gid % 200) / 200.0) - 0.5;
+    pos.y = ((imgpos.y % 200) / 200.0) - 0.5;
 
-    pos.x *= 5;
-    pos.y *= 5;
-    pos.z *= 2;
+    pos.x *= 2;
+    pos.y *= 2;
 
-    // Convert cartesian coordinates to spherical
-    r = length(pos);
-    theta = acos(pos.z / r);
-    phi = atan2(pos.y, pos.x);
+    for(int z = 0; z < 200; z++)
+    {
+        // Find coordinates in atomic coordinate space from image coordinates
+        pos.z = ((float)z / 200.0) - 0.5;
+        pos.z *= 2;
 
-    psi = cmul(cmul(cexp(cnew(-(r / n * a), 0.0)),
-                    cnew(pow((float)(2.0 * r) / (n * a), (float)l), 0.0)),
-               cnew(L(2 * l + 1, n - l - 1, ((2.0 * r) / (n * a))), 0.0));
-    psi = cmul(cmul(psi, Y(m, l, theta, phi)), cnew(ipsi, 0.0));
+        // Convert cartesian coordinates to spherical
+        r = length(pos);
+        theta = acos(pos.z / r);
+        phi = atan2(pos.y, pos.x);
 
-    psiStarPsi = cmul(cconj(psi), psi).x;
+        psi = cmul(cmul(cexp(cnew(-(r / n * a), 0.0)),
+                        cnew(pow((float)(2.0 * r) / (n * a), (float)l), 0.0)),
+                   cnew(L(2 * l + 1, n - l - 1, ((2.0 * r) / (n * a))), 0.0));
+        psi = cmul(cmul(psi, Y(m, l, theta, phi)), cnew(ipsi, 0.0));
 
-    output[imgpos.x + (imgpos.y * 200)] = (psiStarPsi * 100000.0);
+        psiStarPsi = cmul(cconj(psi), psi).x;
+
+        output[imgpos.x + (imgpos.y * 200)] += psiStarPsi;
+    }
 }
 """).build()
 
@@ -246,6 +248,10 @@ def doDensity():
 before = time()
 doDensity()
 print time() - before
+
+scaleFactor = 255.0 / max(output)
+for i in range(0, len(output)):
+    output[i] *= scaleFactor
 
 img = Image.new("L", (200, 200))
 img.putdata(output)
