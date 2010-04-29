@@ -3,21 +3,19 @@ from time import time
 import pyopencl as cl
 import numpy
 
-ctx = cl.Context(dev_type=cl.device_type.GPU)
+mf = cl.mem_flags
+
+ctx = cl.Context(dev_type=cl.device_type.CPU)
 #print ctx.get_info(cl.context_info.DEVICES)
 queue = cl.CommandQueue(ctx)
 
-pointCount = 5000000
+pointCount = 200 * 200 * 200
 n = numpy.int32(2)
 l = numpy.int32(1)
 m = numpy.int32(0)
 
-xyz = 10 * numpy.random.rand(3 * pointCount).astype(numpy.float32) - 5
-output = numpy.zeros(pointCount).astype(numpy.float32)
-
-mf = cl.mem_flags
-xyz_buf = cl.Buffer(ctx, mf.READ_ONLY | mf.COPY_HOST_PTR, hostbuf=xyz)
-dest_buf = cl.Buffer(ctx, mf.WRITE_ONLY, output.nbytes)
+output = numpy.zeros(200 * 200).astype(numpy.float32)
+output_buf = cl.Buffer(ctx, mf.READ_WRITE | mf.COPY_HOST_PTR, hostbuf=output)
 
 prg = cl.Program(ctx, """
 int L(int a, int b, int x)
@@ -185,9 +183,10 @@ float2 Y(int m, int l, float theta, float phi)
     return cmul(root, eiStuff);
 }
 
+const sampler_t samp = CLK_NORMALIZED_COORDS_FALSE | CLK_ADDRESS_CLAMP |
+    CLK_FILTER_NEAREST;
 
-
-__kernel void density(__global float * xyz, __global float ipsi,
+__kernel void density(__global float ipsi,
                       __global int n, __global int l,
                       __global int m, __global float * output)
 {
@@ -195,13 +194,21 @@ __kernel void density(__global float * xyz, __global float ipsi,
 
     float theta, phi, r;
     float4 pos = {0, 0, 0, 0};
+    int2 imgpos = {0, 0};
     float a = 1.0;
     float2 psi;
+    float psiStarPsi;
+    int index;
 
-    // use vector load?
-    pos.x = xyz[(gid * 3) + 0];
-    pos.y = xyz[(gid * 3) + 1];
-    pos.z = xyz[(gid * 3) + 2];
+    // Find coordinates in image from global ID
+    index = floor((float)gid / 300.0f);
+    imgpos.x = index % 300;
+    imgpos.y = floor((float)index / 300.0f);
+
+    // Find coordinates in atomic coordinate space from image coordinates
+    pos.x = ((float)imgpos.x / 300.0) - 150.0;
+    pos.y = ((float)imgpos.y / 300.0) - 150.0;
+    pos.z = (gid % 300) - 150.0;
 
     // Convert cartesian coordinates to spherical
     r = length(pos);
@@ -213,7 +220,9 @@ __kernel void density(__global float * xyz, __global float ipsi,
                cnew(L(2 * l + 1, n - l - 1, ((2.0 * r) / (n * a))), 0.0));
     psi = cmul(cmul(psi, Y(m, l, theta, phi)), cnew(ipsi, 0.0));
 
-    output[gid] = cmul(cconj(psi), psi).x;
+    psiStarPsi = cmul(cconj(psi), psi).x;
+
+    output[imgpos.x + (imgpos.y * 300)] += (psiStarPsi * 10000.0);
 }
 """).build()
 
@@ -226,8 +235,8 @@ def independentPsi(n, l):
 
 def doDensity():
     ipsi = numpy.float32(independentPsi(n, l))
-    prg.density(queue, [pointCount], xyz_buf, ipsi, n, l, m, dest_buf)
-    #cl.enqueue_read_buffer(queue, dest_buf, output).wait()
+    prg.density(queue, [pointCount], ipsi, n, l, m, output_buf)
+    cl.enqueue_read_buffer(queue, output_buf, output).wait()
 
 before = time()
 doDensity()
