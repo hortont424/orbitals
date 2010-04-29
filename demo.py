@@ -11,8 +11,8 @@ ctx = cl.Context(dev_type=cl.device_type.GPU)
 queue = cl.CommandQueue(ctx)
 
 pointCount = 200 * 200
-n = numpy.int32(1)
-l = numpy.int32(0)
+n = numpy.int32(2)
+l = numpy.int32(1)
 m = numpy.int32(0)
 
 output = numpy.zeros(200 * 200).astype(numpy.float32)
@@ -196,7 +196,7 @@ __kernel void density(__global float ipsi,
     float theta, phi, r;
     float4 pos = {0, 0, 0, 0};
     int2 imgpos = {0, 0};
-    float a = 1.0;
+    float a = 100.0;
     float2 psi;
     float psiStarPsi;
 
@@ -205,16 +205,15 @@ __kernel void density(__global float ipsi,
     imgpos.y = floor((float)gid / 200.0f);
 
     pos.x = ((float)imgpos.x / 200.0) - 0.5;
-    pos.y = ((imgpos.y % 200) / 200.0) - 0.5;
+    pos.z = ((imgpos.y % 200) / 200.0) - 0.5;
 
-    pos.x *= 2;
-    pos.y *= 2;
+    pos.x *= 0.15;
+    pos.z *= 0.15;
 
-    for(int z = 0; z < 200; z++)
+    for(float z = -10.0f; z < 10.0f; z += 0.01)
     {
         // Find coordinates in atomic coordinate space from image coordinates
-        pos.z = ((float)z / 200.0) - 0.5;
-        pos.z *= 2;
+        pos.y = z;
 
         // Convert cartesian coordinates to spherical
         r = length(pos);
