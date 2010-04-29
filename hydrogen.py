@@ -10,12 +10,15 @@ ctx = cl.Context(dev_type=cl.device_type.GPU)
 print ctx.get_info(cl.context_info.DEVICES)
 queue = cl.CommandQueue(ctx)
 
-pointCount = 400 * 400
+imageResolution = 400
+
+res = numpy.int32(imageResolution)
+pointCount = imageResolution ** 2
 n = numpy.int32(2)
 l = numpy.int32(1)
 m = numpy.int32(0)
 
-output = numpy.zeros(400 * 400).astype(numpy.float32)
+output = numpy.zeros(pointCount).astype(numpy.float32)
 output_buf = cl.Buffer(ctx, mf.READ_WRITE | mf.COPY_HOST_PTR, hostbuf=output)
 
 prg = cl.Program(ctx, """
@@ -194,7 +197,8 @@ float2 Y(int m, int l, float theta, float phi)
 
 __kernel void density(__global float ipsi,
                       __global int n, __global int l,
-                      __global int m, __global float * output)
+                      __global int m, __global float * output,
+                      __global int resolution)
 {
     int gid = get_global_id(0);
 
@@ -206,11 +210,11 @@ __kernel void density(__global float ipsi,
     float psiStarPsi;
 
     // Find coordinates in image from global ID
-    imgpos.x = gid % 400;
-    imgpos.y = floor((float)gid / 400.0f);
+    imgpos.x = gid % resolution;
+    imgpos.y = floor((float)gid / (float)resolution);
 
-    pos.x = ((float)imgpos.x / 400.0) - 0.5;
-    pos.z = ((imgpos.y % 400) / 400.0) - 0.5;
+    pos.x = ((float)imgpos.x / (float)resolution) - 0.5;
+    pos.z = ((imgpos.y % resolution) / (float)resolution) - 0.5;
 
     pos.x *= 0.15;
     pos.z *= 0.15;
@@ -232,7 +236,7 @@ __kernel void density(__global float ipsi,
 
         psiStarPsi = cmul(cconj(psi), psi).x;
 
-        output[imgpos.x + (imgpos.y * 400)] += psiStarPsi;
+        output[imgpos.x + (imgpos.y * resolution)] += psiStarPsi;
     }
 }
 """).build()
@@ -246,7 +250,7 @@ def independentPsi(n, l):
 
 def doDensity():
     ipsi = numpy.float32(independentPsi(n, l))
-    prg.density(queue, [pointCount], ipsi, n, l, m, output_buf)
+    prg.density(queue, [pointCount], ipsi, n, l, m, output_buf, res)
     cl.enqueue_read_buffer(queue, output_buf, output).wait()
 
 before = time()
@@ -257,6 +261,6 @@ scaleFactor = 255.0 / max(output)
 for i in range(0, len(output)):
     output[i] *= scaleFactor
 
-img = Image.new("L", (400, 400))
+img = Image.new("L", (res, res))
 img.putdata(output)
 img.show()
