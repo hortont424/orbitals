@@ -149,12 +149,20 @@ float2 cnew(float x, float y)
     return c;
 }
 
+float2 cnewf(float x)
+{
+    float2 c;
+    c.x = x;
+    c.y = 0.0;
+    return c;
+}
+
 float2 csqrtf(float a)
 {
     if(a <= 0.0)
         return cnew(0.0, sqrt(a * -1.0f));
 
-    return cnew(sqrt(a), 0.0);
+    return cnewf(sqrt(a));
 }
 
 float2 cexp(float2 a)
@@ -178,9 +186,9 @@ float2 Y(int m, int l, float theta, float phi)
 {
     float rootFirst = (2.0 * l + 1.0) / (4 * 3.1415926);
     float rootSecond = fact(l - abs(m)) / fact(l + abs(m));
-    float2 root = cmul(cnew(EP(m), 0.0), csqrtf(rootFirst * rootSecond));
+    float2 root = cmul(cnewf(EP(m)), csqrtf(rootFirst * rootSecond));
     float2 eiStuff = cmul(cexp(cnew(0.0, m * phi)),
-                          cnew(P(m, l, native_cos(theta)), 0.0));
+                          cnewf(P(m, l, native_cos(theta))));
     return cmul(root, eiStuff);
 }
 
@@ -217,10 +225,10 @@ __kernel void density(__global float ipsi,
         theta = acos(pos.z / r);
         phi = atan2(pos.y, pos.x);
 
-        psi = cmul(cmul(cexp(cnew(-(r / n * a), 0.0)),
-                        cnew(pow((float)(2.0 * r) / (n * a), (float)l), 0.0)),
-                   cnew(L(2 * l + 1, n - l - 1, ((2.0 * r) / (n * a))), 0.0));
-        psi = cmul(cmul(psi, Y(m, l, theta, phi)), cnew(ipsi, 0.0));
+        psi = cmul(cmul(cexp(cnewf(-(r / n * a))),
+                        cnewf(pow((float)(2.0 * r) / (n * a), (float)l))),
+                   cnewf(L(2 * l + 1, n - l - 1, ((2.0 * r) / (n * a)))));
+        psi = cmul(cmul(psi, Y(m, l, theta, phi)), cnewf(ipsi));
 
         psiStarPsi = cmul(cconj(psi), psi).x;
 
