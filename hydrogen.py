@@ -6,7 +6,7 @@ from PIL import Image
 
 mf = cl.mem_flags
 
-ctx = cl.Context(dev_type=cl.device_type.CPU)
+ctx = cl.Context(dev_type=cl.device_type.GPU)
 #print ctx.get_info(cl.context_info.DEVICES)
 queue = cl.CommandQueue(ctx)
 
