@@ -6,21 +6,9 @@ from PIL import Image
 
 mf = cl.mem_flags
 
-ctx = cl.Context(dev_type=cl.device_type.GPU)
-print ctx.get_info(cl.context_info.DEVICES)
+ctx = cl.Context(dev_type=cl.device_type.CPU)
+#print ctx.get_info(cl.context_info.DEVICES)
 queue = cl.CommandQueue(ctx)
-
-# There's a strange bug where changing resolution sometimes makes no output
-imageResolution = 400
-
-res = numpy.int32(imageResolution)
-pointCount = imageResolution ** 2
-n = numpy.int32(3)
-l = numpy.int32(2)
-m = numpy.int32(0)
-
-output = numpy.zeros(pointCount).astype(numpy.float32)
-outputBuffer = cl.Buffer(ctx, mf.READ_WRITE | mf.COPY_HOST_PTR, hostbuf=output)
 
 kernelFile = open('hydrogen.cl', 'r')
 prg = cl.Program(ctx, kernelFile.read()).build()
@@ -33,22 +21,46 @@ def independentPsi(n, l):
 
     return sqrt(rootFirst * rootSecond)
 
-def doDensity():
+def doDensity(ni, li, mi, imageResolution):
+    res = numpy.int32(imageResolution)
+    pointCount = imageResolution ** 2
+    n = numpy.int32(ni)
+    l = numpy.int32(li)
+    m = numpy.int32(mi)
+
+    output = numpy.zeros(pointCount).astype(numpy.float32)
+    outputBuffer = cl.Buffer(ctx, mf.READ_WRITE | mf.COPY_HOST_PTR, hostbuf=output)
+
     ipsi = numpy.float32(independentPsi(n, l))
     prg.density(queue, [pointCount], ipsi, n, l, m, outputBuffer, res)
     cl.enqueue_read_buffer(queue, outputBuffer, output).wait()
 
-before = time()
-doDensity()
-print time() - before
+    outputBuffer.release()
 
-scaleFactor = 255.0 / max(output)
-for i in range(0, len(output)):
-    output[i] *= scaleFactor
+    return output
 
-img = Image.new("L", (res, res))
-img.putdata(output)
-img.show()
-img.save("/tmp/orbitals.png", "PNG")
+def exportImage(output):
+    scaleFactor = 255.0 / max(output)
+    for i in range(0, len(output)):
+        output[i] *= scaleFactor
 
-outputBuffer.release()
+    res = int(sqrt(len(output)))
+    img = Image.new("L", (res, res))
+    img.putdata(output)
+    img.show()
+    img.save("/tmp/orbitals.png", "PNG")
+
+def densityTiming(res):
+    before = time()
+    output = doDensity(3, 2, 0, res)
+    duration = time() - before
+
+    if max(output) > 0.0:
+        return duration
+    else:
+        return None
+
+for i in range(100,1000,100):
+    duration = densityTiming(i)
+    if duration:
+        print "{0},{1}".format(i,duration)

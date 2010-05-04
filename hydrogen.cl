@@ -78,6 +78,8 @@ float P(int a, int b, float x)
             return 0.5 * (-1 + (3.0 * x * x));
         else if(b == 3)
             return 0.5 * ((-3.0 * x) + (5.0 * x * x * x));
+        else if(b == 4)
+            return ((3.0 - (30.0 * x * x) + (35.0 * x * x * x * x)) / 8.0);
     }
     else if(a == 1)
     {
@@ -90,6 +92,8 @@ float P(int a, int b, float x)
         else if(b == 3)
             return - (3.0 / 2.0) * sqrt((float)1.0 - (x * x)) *
                 (-1.0 + (5.0 * x * x));
+        else if(b == 4)
+            return ((-(5.0 / 2.0) * sqrt(1.0f - (x * x)) * (-3.0 * x + (7 * x * x * x))));
     }
     else if(a == 2)
     {
@@ -101,6 +105,8 @@ float P(int a, int b, float x)
             return -3.0 * (-1.0 + (x * x));
         else if(b == 3)
             return -(15.0 * x) * (-1.0 + (x * x));
+        else if(b == 4)
+            return -(15.0 / 2.0) * ((x * x) - 1.0) * ((7.0 * x * x) - 1.0);
     }
     else if(a == 3)
     {
@@ -111,7 +117,22 @@ float P(int a, int b, float x)
         else if(b == 2)
             return 0.0;
         else if(b == 3)
-            return -15.0 * pow((float)1.0f - (x * x), (float)(3.0f / 2.0f));
+            return -15.0f * pow((float)1.0f - (x * x), (float)(3.0f / 2.0f));
+        else if(b == 4)
+            return -105.0f * x * pow((float)1.0f - (x * x), 3.0f / 2.0f);
+    }
+    else if(a == 4)
+    {
+        if(b == 0)
+            return 0.0;
+        else if(b == 1)
+            return 0.0;
+        else if(b == 2)
+            return 0.0;
+        else if(b == 3)
+            return 0.0;
+        else if(b == 4)
+            return 105.0 * pow((x * x) - 1.0f, 2.0f);
     }
 }
 
