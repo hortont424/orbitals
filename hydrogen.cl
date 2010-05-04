@@ -1,5 +1,8 @@
+typedef float2 Complex;
+
 float fact(float n)
 {
+    // Factorial... slow?
     float f = 1.0;
 
     if(n <= 0.0)
@@ -139,62 +142,64 @@ float P(int a, int b, float x)
 float EP(float m)
 {
     if(m >= 0)
-    {
         return pow(-1.0f, m);
-    }
     else
-    {
         return 1.0;
-    }
 }
 
-float2 cnew(float x, float y)
+Complex cnew(float x, float y)
 {
-    float2 c;
+    // Create a new complex number
+    Complex c;
     c.x = x;
     c.y = y;
     return c;
 }
 
-float2 cnewf(float x)
+Complex cnewf(float x)
 {
-    float2 c;
+    // Create a new complex number with only a real component
+    Complex c;
     c.x = x;
     c.y = 0.0;
     return c;
 }
 
-float2 csqrtf(float a)
+Complex csqrtf(float a)
 {
+    // Take the square root of the complex number a
     if(a <= 0.0)
         return cnew(0.0, sqrt(a * -1.0f));
 
     return cnewf(sqrt(a));
 }
 
-float2 cexp(float2 a)
+Complex cexp(Complex a)
 {
+    // Compute the exponential e to the complex number a
     float module = exp(a.x);
     float angle = a.y;
     return cnew(module * native_cos(angle), module * native_sin(angle));
 }
 
-float2 cmul(float2 a, float2 b)
+Complex cmul(Complex a, Complex b)
 {
+    // Multiply two complex numbers
     return cnew(mad(-a.y, b.y, a.x * b.x), mad(a.y, b.x, a.x * b.y));
 }
 
-float2 cconj(float2 a)
+Complex cconj(Complex a)
 {
+    // Take the complex conjugate of a
     return cnew(a.x, -a.y);
 }
 
-float2 Y(int m, int l, float theta, float phi)
+Complex Y(int m, int l, float theta, float phi)
 {
     float rootFirst = (2.0 * l + 1.0) / (4 * 3.1415926);
     float rootSecond = fact(l - abs(m)) / fact(l + abs(m));
-    float2 root = cmul(cnewf(EP(m)), csqrtf(rootFirst * rootSecond));
-    float2 eiStuff = cmul(cexp(cnew(0.0, m * phi)),
+    Complex root = cmul(cnewf(EP(m)), csqrtf(rootFirst * rootSecond));
+    Complex eiStuff = cmul(cexp(cnew(0.0, m * phi)),
                           cnewf(P(m, l, native_cos(theta))));
     return cmul(root, eiStuff);
 }
@@ -210,22 +215,26 @@ __kernel void density(__global float ipsi,
     float4 pos = {0, 0, 0, 0};
     int2 imgpos = {0, 0};
     float a = 100.0;
-    float2 psi;
+    Complex psi;
     float psiStarPsi;
 
     // Find coordinates in image from global ID
     imgpos.x = gid % resolution;
     imgpos.y = floor((float)gid / (float)resolution);
 
+    // Find coordinates in atomic coordinate space from image coordinates
     pos.x = ((float)imgpos.x / (float)resolution) - 0.5;
     pos.z = ((imgpos.y % resolution) / (float)resolution) - 0.5;
 
+    // Arbitrary scale factor, based on parameters
+    // TODO: find a way to generate this
     pos.x *= 0.35;
     pos.z *= 0.35;
 
     for(float z = -10.0f; z < 10.0f; z += 0.01)
     {
-        // Find coordinates in atomic coordinate space from image coordinates
+        // Choose a y in atomic coordinate space to evaluate at; we iterate
+        // through (-10, 10) by 0.01, taking 2000 samples per pixel
         pos.y = z;
 
         // Convert cartesian coordinates to spherical
@@ -233,11 +242,13 @@ __kernel void density(__global float ipsi,
         theta = acos(pos.z / r);
         phi = atan2(pos.y, pos.x);
 
+        // Evaluate psi
         psi = cmul(cmul(cexp(cnewf(-(r / n * a))),
                         cnewf(pow((float)(2.0 * r) / (n * a), (float)l))),
                    cnewf(L(2 * l + 1, n - l - 1, ((2.0 * r) / (n * a)))));
         psi = cmul(cmul(psi, Y(m, l, theta, phi)), cnewf(ipsi));
 
+        // Normalize psi
         psiStarPsi = cmul(cconj(psi), psi).x;
 
         output[imgpos.x + (imgpos.y * resolution)] += psiStarPsi;
