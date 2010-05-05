@@ -35,7 +35,7 @@ asdfasdfadsf asdf adsf asdf asdf adfasdf adsf adf asfd
 
 \section{Implementation}
 
-\section{Software and Hardware}
+\section{Hardware}
 
 Benchmarks will be performed on a number of different OpenCL compute devices across a few different computers:
 
@@ -50,6 +50,10 @@ Benchmarks will be performed on a number of different OpenCL compute devices acr
 \item Intel Atom N270, 1$\times$1600MHz, 2GB RAM, 44\$\footref{fn:prices}
 
 \end{itemize}
+
+These machines run a variety of different operating systems (including Mac OS X, Windows, and Linux). Comparisons made later in this paper assume that each OS and the drivers and OpenCL implementation used within them are created equally; this is only somewhat reasonable, and should be kept in mind when interpreting results.
+
+Also, it should be noted that while each core on a given CPU could potentially be evaluating samples in parallel, a GPU's cores are much more restricted (less general-purpose) and must work in small groups to accomplish their work. Therefore, given the kernel used for this project, the 4890 listed above only has 50 compute units (16 stream processors work together to compute a single sample).
 
 \section{Results}
 
