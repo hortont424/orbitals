@@ -137,37 +137,43 @@ Also, it should be noted that while each core on a given CPU could potentially b
 
 \section{Results}
 
-\subsection{Large- vs. Small-scale Parallelism}
-
-\begin{figure}
-    \includegraphics[width=84.5mm]{runtimePlot.pdf}
-    \caption{Runtime vs. Resolution on All Hardware}
-    \label{fig:runtimePlot}
-\end{figure}
-
-\begin{figure}
-    \includegraphics[width=84.5mm]{speedupPlot.pdf}
-    \caption{Runtime vs. Resolution on All Hardware}
-    \label{fig:runtimePlot}
-\end{figure}
-
 \subsection{Strong Scaling}
+
+\label{strongScaling}
 
 In order to measure the strong scalability of our implementation, we fix the problem size and vary the number of processing units used to compute it. For this benchmark, we will fix the image at $400\times400$ pixels, requiring $320,000,000$ total samples, and we will vary the number of cores of the 4890 that we use.
 
 \begin{figure}
     \includegraphics[width=84.5mm]{strongPlotOne.pdf}
-    \caption{Core Count vs. Runtime on the 4890 with a fixed resolution ($400\times400$)}
+    \caption{Core Count vs. Runtime on the 4890 with a fixed resolution ($400\times400$); smaller values are better}
     \label{fig:strongPlotOne}
 \end{figure}
 
 \begin{figure}
     \includegraphics[width=84.5mm]{strongPlotTwo.pdf}
-    \caption{Core Count vs. Speedup (measured against the single-core run) on the 4890 with a fixed resolution ($400\times400$); the orange line is the theoretical maximum speedup, given linear scaling and 50 execution units (800 cores / 16 cores per unit); the red line is a linear speedup curve}
+    \caption{Core Count vs. Speedup (measured against the single-core run) on the 4890 with a fixed resolution ($400\times400$); the orange line is the theoretical maximum speedup, given linear scaling and 50 execution units (800 cores / 16 cores per unit); the red line is a linear speedup curve; larger values are better}
     \label{fig:strongPlotTwo}
 \end{figure}
 
 One can see in figure \ref{fig:strongPlotTwo} that this implementation is strongly scalable; the speedup is almost perfectly linear as the core count increases. It should be noted that since the 4890 only has a maximum of 50 compute units, the linear increase is only maintained until we reach 50 cores; after that, the performance gains plateau as they should.
+
+\subsection{Large- vs. Small-scale Parallelism}
+
+\begin{figure}
+    \includegraphics[width=84.5mm]{runtimePlot.pdf}
+    \caption{Runtime vs. Resolution on all hardware; smaller values are better}
+    \label{fig:runtimePlot}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=84.5mm]{speedupPlot.pdf}
+    \caption{Speedup of fastest GPU over fastest CPU as resolution increases; larger values are better}
+    \label{fig:speedupPlot}
+\end{figure}
+
+Figure \ref{fig:speedupPlot} shows that our implementation converges to an approximately 14.7x speedup (between the fastest of each class of hardware, namely, the 4890 and Core 2 Quad) as the resolution of the output image increases. Noise in the speedup values with smaller images is likely due to measurement error and the overhead and unpredictability involved when copying data to/from video memory.
+
+It should be noted that these speedup values are across different pieces of hardware at different core clock speeds, and, as such, do not represent the actual parallel speedup gained (for that, look at section \ref{strongScaling}). This is, instead, a representation of the performance potentially gained by moving computation to the GPU.
 
 \subsection{Cost Effectiveness of Hardware}
 
