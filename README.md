@@ -19,11 +19,3 @@ Dependencies
 * PyOpenCL
 * PIL
 * numpy
-
-Benchmarks
-----------
-
-Very roughly: right now I'm seeing approximately an 18x speedup using a
-NVIDIA GeForce 330M GT GPU over a Intel Core i7 @ 2x2.66/3.33GHz. This leads
-me to expect something on the order of 40-50x when I get PyOpenCL working on
-the machine which my ATI Radeon 4890 is attached to...
