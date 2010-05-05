@@ -39,31 +39,49 @@ asdfasdfadsf asdf adsf asdf asdf adfasdf adsf adf asfd
 
 \subsection{Schr\"{o}dinger's Equation}
 
-\[
+From \cite{quantumBook}, we find the single-electron solution to Schr\"{o}dinger's equation:
+
+\begin{equation}\label{psi}
 \psi\left(n, l, m\right)=\psi_c\left(n, l\right)
 \mathit{e}^{-r/na}
 \left(\frac{2r}{na}\right)^l
 \left[L_{n-l-1}^{2l+1}
     \left(\frac{2r}{na}\right)\right]
 Y_l^m\left(\theta,\phi\right)
-\]
+\end{equation}
 
-\[
+\begin{equation}\label{psiConstant}
 \psi_c\left(n, l\right)=\sqrt{\left(\frac{2}{na}\right)^3
     \frac{\left(n-l-1\right)!}{2n\left[\left(n+l\right)!\right]^3}}
-\]
+\end{equation}
 
-\subsection{Spherical Harmonics}
+One will notice that $\psi_c$ is independent of the coordinates of evaluation, $\left(\theta, \phi, r\right)$, so it --- as an obvious optimization --- can be computed once and cached for the entire image.
 
-\[
+Also, $\psi$ depends on two external functions: $Y$, the spherical harmonic equation (equation \ref{yFunc}), and $L$, the Laguerre polynomial (equation \ref{laguerre}).
+
+\subsection{Spherical Harmonics\label{sphericalHarmonics}}
+
+\begin{equation}\label{yFunc}
 Y_l^m\left(\theta,\phi\right)=\epsilon
 \sqrt{\frac{\left(2l+1\right)}{4\pi}
     \frac{\left(l-\left|m\right|\right)!}{\left(l+\left|m\right|\right)!}}
 \mathit{e}^{{\rm i}m\phi}
 P^m_l\left(\cos\theta\right)
-\]
+\end{equation}
 
-\subsection{Laguerre and Legendre}
+$Y$ depends on an additional external function, $P$, the Legendre polynomial (equation \ref{legendre}).
+
+\subsection{Laguerre and Legendre\label{laguerreLegendre}}
+
+Key to the evaluation of Schr\"{o}dinger's equation are the Laguerre and Legendre polynomials. Unfortunately, 
+
+\begin{equation}\label{laguerre}
+L^\alpha_n\left(x\right)=\frac{x^{-\alpha}e^x}{n!}\frac{d^n}{dx^n}\left(e^{-x}x^{n+\alpha}\right)
+\end{equation}
+
+\begin{equation}\label{legendre}
+P=
+\end{equation}
 
 \section{Implementation}
 
@@ -92,6 +110,8 @@ Also, it should be noted that while each core on a given CPU could potentially b
 \subsection{Large- vs. Small-scale Parallelism}
 
 \subsection{Strong Scaling}
+
+In order to measure the strong scalability of our implementation, we fix the problem size and vary the number of processing units used to compute it. For this benchmark, we will fix the image at $400\times400$ pixels, requiring $320,000,000$ total samples, and we will vary the number of cores of the 4890 that we use.
 
 \subsection{Cost Effectiveness of Hardware}
 
