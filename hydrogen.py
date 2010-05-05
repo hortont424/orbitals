@@ -61,28 +61,27 @@ def exportImage(output):
     img.save("/tmp/orbitals.png", "PNG")
 
 def benchmark(skip, params=(3,2,0)):
-    """Time computation of the image at various different resolutions; average
-    together 10 trials for each resolution"""
+    """Time computation of the image at various different resolutions"""
     for res in range(100,1010,skip):
-        totalDuration = totalSuccessful = 0
+        minDuration = 0
 
-        for run in range(10):
+        for itr in range(5):
             (output, duration) = renderOrbitals(params, res)
-
-            # At some resolutions, on my mobile GPU, I get a totally black image
-            # I have no idea why this happens, but this sits here to discard
-            # those results, since their timing seems to be somewhat inaccurate.
             if max(output) > 0.0:
-                totalDuration += duration
-                totalSuccessful += 1
+                minDuration = min(minDuration, duration)
 
-        if totalSuccessful > 0:
-            print "{0},{1}".format(res, totalDuration / totalSuccessful)
+        # At some resolutions, on my mobile GPU, I get a totally black image
+        # I have no idea why this happens, but this sits here to discard
+        # those results, since their timing seems to be somewhat inaccurate.
+        if minDuration:
+            print "{0},{1}".format(res, minDuration)
 
 def main():
     # Parse commandline arguments
     parser = OptionParser(usage="%prog [-b/B] [-c] [-p n,l,m]",
                           version="%prog 0.1")
+    parser.add_option("-i", "--individual-bench", action="store_true",
+                      default=False, dest="onebench", help="run one benchmark")
     parser.add_option("-b", "--bench", action="store_true", default=False,
                       dest="benchmark", help="run short benchmark")
     parser.add_option("-B", "--long-bench", action="store_true",
@@ -104,12 +103,13 @@ def main():
         main.ctx = cl.Context(dev_type=cl.device_type.GPU)
 
     # Output device(s) being used for computation
-    print "Running on:"
-    for dev in main.ctx.get_info(cl.context_info.DEVICES):
-        print "   ",
-        print dev.get_info(cl.device_info.VENDOR),
-        print dev.get_info(cl.device_info.NAME)
-    print
+    if not (options.benchmark or options.longBenchmark or options.onebench):
+        print "Running on:"
+        for dev in main.ctx.get_info(cl.context_info.DEVICES):
+            print "   ",
+            print dev.get_info(cl.device_info.VENDOR),
+            print dev.get_info(cl.device_info.NAME)
+        print
 
     # Load and compile the OpenCL kernel
     main.queue = cl.CommandQueue(main.ctx)
@@ -122,6 +122,9 @@ def main():
         benchmark(100, params=params)
     elif options.longBenchmark:
         benchmark(10, params=params)
+    elif options.onebench:
+        (output, duration) = renderOrbitals(params, int(options.res))
+        print "{0},{1}".format(options.res, duration)
     else:
         (output, duration) = renderOrbitals(params, int(options.res))
         exportImage(output)
