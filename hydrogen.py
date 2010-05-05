@@ -80,6 +80,8 @@ def main():
     # Parse commandline arguments
     parser = OptionParser(usage="%prog [-b/B] [-c] [-p n,l,m]",
                           version="%prog 0.1")
+    parser.add_option("-a", "--ati", action="store_true", default=False,
+                      dest="promptForDevice", help="prompt for device")
     parser.add_option("-i", "--individual-bench", action="store_true",
                       default=False, dest="onebench", help="run one benchmark")
     parser.add_option("-b", "--bench", action="store_true", default=False,
@@ -97,12 +99,13 @@ def main():
 
     params = tuple([int(a) for a in options.params.split(",")])
 
-    #if options.useCPU:
-    #    main.ctx = cl.Context(dev_type=cl.device_type.CPU)
-    #else:
-    #    main.ctx = cl.Context(dev_type=cl.device_type.GPU)
-
-    main.ctx = cl.create_some_context()
+    if not options.promptForDevice:
+        if options.useCPU:
+            main.ctx = cl.Context(dev_type=cl.device_type.CPU)
+        else:
+            main.ctx = cl.Context(dev_type=cl.device_type.GPU)
+    else:
+        main.ctx = cl.create_some_context()
 
     # Output device(s) being used for computation
     if not (options.benchmark or options.longBenchmark or options.onebench):
