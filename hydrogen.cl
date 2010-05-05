@@ -208,10 +208,10 @@ Complex Y(int m, int l, float theta, float phi)
     return cmul(root, eiStuff);
 }
 
-__kernel void density(float ipsi,
-                      int n, int l,
-                      int m, __global float * output,
-                      int resolution)
+__kernel void density(__global float ipsi,
+                      __global int n, __global int l,
+                      __global int m, __global float * output,
+                      __global int resolution)
 {
     int gid = get_global_id(0);
 
