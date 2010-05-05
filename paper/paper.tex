@@ -101,9 +101,15 @@ where $\tilde{F}$ is Gauss' hypergeometric function, which we don't care about s
 
 \section{Implementation}
 
+\subsection{Overview}
+
 Our implementation is twofold: an OpenCL kernel (written in the C-like OpenCL kernel language) which performs the evaluation of all of the Schr\"{o}dinger's equation samples required for a single pixel of the output image, and a Python script which parses command line options, uses PyOpenCL to load and run the kernel and PIL to create the output image, and performs timed benchmarks.
 
+\subsection{Simplifications}
+
 The decision was made during the implementation phase to redefine the Bohr radius so that $a=1$; this was done in order to keep intermediate numbers within the range of single-precision floating point values, as OpenCL doesn't currently support native double-precision math on any of the GPUs available for benchmarking. Since we're only using this software to generate visualizations, this doesn't affect the output; it simply scales the distances away from the atomic level. The equations above have $a=1$ already substituted in, for brevity.
+
+To keep the implementation of this algorithm within the scope of this project, we also decided to use a fixed-camera orthogonal projection. This worked to significantly simplify the process of iteration over all of the samples, as with this restriction, the program simply has to iterate over all of the pixels in the image, evaluating $n$ points in the $z$ dimension for each pixel, without worrying about complex transformations between coordinate systems.
 
 \section{Hardware}
 
@@ -170,6 +176,8 @@ One can see in figure \ref{fig:strongPlotTwo} that this implementation is strong
     \caption{Speedup of fastest GPU over fastest CPU as resolution increases; larger values are better}
     \label{fig:speedupPlot}
 \end{figure}
+
+As one can see in \ref{fig:runtimePlot}, both GPUs significantly outperform all of the CPUs
 
 Figure \ref{fig:speedupPlot} shows that our implementation converges to an approximately 14.7x speedup (between the fastest of each class of hardware, namely, the 4890 and Core 2 Quad) as the resolution of the output image increases. Noise in the speedup values with smaller images is likely due to measurement error and the overhead and unpredictability involved when copying data to/from video memory.
 
