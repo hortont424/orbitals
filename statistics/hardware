@@ -1,0 +1,4 @@
+4890.csv: Windows, ATI Radeon 4890, 800x850MHz, 1GB RAM @ 950MHz, 250$
+Corei7.csv: Mac OS X, Intel Core i7 620M, 2x3333MHz, 4GB RAM @ 1067MHz, 332$
+Core2Quad.csv: Linux, Intel Core 2 Quad Q6600, 4x3000MHz, 4GB RAM @ 735MHz, 500$
+Atom.csv: Linux, Intel Atom N270, 1x1.6GHz, 2GB RAM @ 400MHz, 44$
