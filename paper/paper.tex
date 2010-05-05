@@ -16,7 +16,10 @@
 
 \maketitle
 
-\includegraphics[width=84.5mm]{320.png}
+\begin{figure}
+    \includegraphics[width=84.5mm]{320.png}
+    \caption{The 3-2-0 orbital of the hydrogen atom}
+\end{figure}
 
 \section{Abstract}
 
@@ -34,11 +37,35 @@ asdfasdfadsf asdf adsf asdf asdf adfasdf adsf adf asfd
 
 \section{Physics}
 
+\subsection{Schr\"{o}dinger's Equation}
+
+\[
+\sqrt{\left(\frac{2}{na}\right)^3
+    \frac{\left(n-l-1\right)!}{2n\left[\left(n+l\right)!\right]^3}}
+\mathit{e}^{-r/na}
+\left(\frac{2r}{na}\right)^l
+\left[L_{n-l-1}^{2l+1}
+    \left(\frac{2r}{na}\right)\right]
+Y_l^m\left(\theta,\phi\right)
+\]
+
+\subsection{Spherical Harmonics}
+
+\[
+Y_l^m\left(\theta,\phi\right)=\epsilon
+\sqrt{\frac{\left(2l+1\right)}{4\pi}
+    \frac{\left(l-\left|m\right|\right)!}{\left(l+\left|m\right|\right)!}}
+\mathit{e}^{{\rm i}m\phi}
+P^m_l\left(\cos\theta\right)
+\]
+
+\subsection{Laguerre and Legendre}
+
 \section{Implementation}
 
 \section{Hardware}
 
-Benchmarks will be performed on a number of different OpenCL compute devices across a few different computers:
+Benchmarks will be performed on a number of different computation devices across a few different computers:
 
 \begin{itemize}
 
