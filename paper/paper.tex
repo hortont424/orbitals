@@ -44,15 +44,15 @@ From \cite{quantumBook}, we find the single-electron solution to Schr\"{o}dinger
 
 \begin{equation}\label{psi}
 \psi\left(n, l, m\right)=\psi_c
-\left(\mathit{e}^{-r/na}\right)
-\left(\frac{2r}{na}\right)^l
+\left(\mathit{e}^{-r/n}\right)
+\left(\frac{2r}{n}\right)^l
 \left[L_{n-l-1}^{2l+1}
-    \left(\frac{2r}{na}\right)\right]
+    \left(\frac{2r}{n}\right)\right]
 Y_l^m\left(\theta,\phi\right),
 \end{equation}
 
 \begin{equation}\label{psiConstant}
-\psi_c=\sqrt{\left(\frac{2}{na}\right)^3
+\psi_c=\sqrt{\left(\frac{2}{n}\right)^3
     \frac{\left(n-l-1\right)!}{2n\left[\left(n+l\right)!\right]^3}}.
 \end{equation}
 
@@ -103,7 +103,7 @@ where $\tilde{F}$ is Gauss' hypergeometric function, which we don't care about s
 
 Our implementation is twofold: an OpenCL kernel (written in the C-like OpenCL kernel language) which performs the evaluation of all of the Schr\"{o}dinger's equation samples required for a single pixel of the output image, and a Python script which parses command line options, uses PyOpenCL to load and run the kernel and PIL to create the output image, and performs timed benchmarks.
 
-The decision was made during the implementation phase to redefine the Bohr radius so that $a=1$; this was done in order to keep intermediate numbers within the range of single-precision floating point values, as OpenCL doesn't currently support native double-precision math on any of the GPUs available for benchmarking. Since we're only using this software to generate visualizations, this doesn't affect the output; it simply scales the distances away from the atomic level.
+The decision was made during the implementation phase to redefine the Bohr radius so that $a=1$; this was done in order to keep intermediate numbers within the range of single-precision floating point values, as OpenCL doesn't currently support native double-precision math on any of the GPUs available for benchmarking. Since we're only using this software to generate visualizations, this doesn't affect the output; it simply scales the distances away from the atomic level. The equations above have $a=1$ already substituted in, for brevity.
 
 \section{Hardware}
 
