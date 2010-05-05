@@ -63,7 +63,7 @@ def exportImage(output):
 def benchmark(skip, params=(3,2,0)):
     """Time computation of the image at various different resolutions"""
     for res in range(100,1010,skip):
-        minDuration = 0
+        minDuration = 100000000
 
         for itr in range(5):
             (output, duration) = renderOrbitals(params, res)
