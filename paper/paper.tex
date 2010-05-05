@@ -129,6 +129,16 @@ Also, it should be noted that while each core on a given CPU could potentially b
 
 In order to measure the strong scalability of our implementation, we fix the problem size and vary the number of processing units used to compute it. For this benchmark, we will fix the image at $400\times400$ pixels, requiring $320,000,000$ total samples, and we will vary the number of cores of the 4890 that we use.
 
+\begin{figure}
+    \includegraphics[width=84.5mm]{strongPlotOne.pdf}
+    \caption{Core Count vs. Runtime on the 4890 with a fixed resolution ($400\times400$)}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=84.5mm]{strongPlotTwo.pdf}
+    \caption{Core Count vs. Speedup (measured against a single-core run) on the 4890 with a fixed resolution ($400\times400$); the orange line is the theoretical maximum speedup, given linear scaling and 50 execution units (800 cores / 16 cores per unit); the red line is a linear (1:1) speedup curve}
+\end{figure}
+
 \subsection{Cost Effectiveness of Hardware}
 
 \section{Future Work}

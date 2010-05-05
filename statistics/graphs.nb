@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     17337,        421]
-NotebookOptionsPosition[     16586,        391]
-NotebookOutlinePosition[     16927,        406]
-CellTagsIndexPosition[     16884,        403]
+NotebookDataLength[     17825,        433]
+NotebookOptionsPosition[     16963,        399]
+NotebookOutlinePosition[     17304,        414]
+CellTagsIndexPosition[     17261,        411]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -144,7 +144,7 @@ Oj+p33yX2WJCdrf+fHddOvfX4L1JUV64JAP/AkoItYs=
    3.4820074766014147`*^9, 3.482007637847238*^9, {3.4820124593672857`*^9, 
    3.4820124793630657`*^9}, 3.48201252117076*^9, {3.482012661329105*^9, 
    3.482012734966195*^9}, {3.482032774798217*^9, 3.482032810867693*^9}, 
-   3.482033264222558*^9}]
+   3.482033264222558*^9, 3.482034179533136*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -180,17 +180,15 @@ Cell[BoxData[{
      RowBox[{"100", ",", "18"}], "}"}]}], ",", 
    RowBox[{"AxesLabel", "\[Rule]", 
     RowBox[{"{", 
-     RowBox[{"\"\<Image Width\>\"", ",", "\"\<Speedup\>\""}], "}"}]}], ",", 
-   RowBox[{
-   "PlotLabel", "\[Rule]", 
-    "\"\<Speedup of Atomic Orbital Simulation on GPU vs. CPU\>\""}]}], 
+     RowBox[{"\"\<Image Width\>\"", ",", "\"\<Speedup\>\""}], "}"}]}]}], 
   "]"}]}], "Input",
  CellChangeTimes->{{3.4819391457093163`*^9, 3.481939155087833*^9}, {
    3.4819392047379713`*^9, 3.481939248272625*^9}, {3.481939312304748*^9, 
    3.48193932018295*^9}, 3.481939385863546*^9, {3.481939512442211*^9, 
    3.48193957789641*^9}, {3.481981098644845*^9, 3.4819811580252733`*^9}, {
    3.4819813469677277`*^9, 3.481981398408142*^9}, {3.4820124876111097`*^9, 
-   3.482012488730617*^9}, {3.482012547489912*^9, 3.482012571367028*^9}}],
+   3.482012488730617*^9}, {3.482012547489912*^9, 3.482012571367028*^9}, {
+   3.482034494259438*^9, 3.4820344945155573`*^9}}],
 
 Cell[BoxData[
  GraphicsBox[{{}, {}, 
@@ -225,13 +223,11 @@ i/P/H1pon9U=
     FormBox["\"Speedup\"", TraditionalForm]},
   AxesOrigin->{100, 18},
   ImageSize->{644., Automatic},
-  PlotLabel->FormBox[
-   "\"Speedup of Atomic Orbital Simulation on GPU vs. CPU\"", TraditionalForm],
   PlotRange->{All, All},
   PlotRangeClipping->True,
   PlotRangePadding->{Automatic, Automatic}]], "Output",
  CellChangeTimes->{{3.482032774835392*^9, 3.482032810926592*^9}, 
-   3.482033264276243*^9}]
+   3.482033264276243*^9, 3.48203417957541*^9, 3.482034494949791*^9}]
 }, Open  ]],
 
 Cell[BoxData[
@@ -247,19 +243,19 @@ Cell[BoxData[
 Cell[CellGroupData[{
 
 Cell[BoxData[
- RowBox[{"ListLinePlot", "[", 
-  RowBox[{"strongScaling", ",", 
-   RowBox[{"PlotStyle", "\[Rule]", "Thick"}], ",", 
-   RowBox[{"AxesLabel", "\[Rule]", 
-    RowBox[{"{", 
-     RowBox[{"\"\<Allocated Cores\>\"", ",", "\"\<Runtime (s)\>\""}], "}"}]}],
-    ",", 
-   RowBox[{
-   "PlotLabel", "\[Rule]", 
-    "\"\<Strong Scaling: Core Count vs. Runtime\>\""}]}], "]"}]], "Input",
+ RowBox[{"strongPlotOne", "=", 
+  RowBox[{"ListLinePlot", "[", 
+   RowBox[{"strongScaling", ",", 
+    RowBox[{"PlotStyle", "\[Rule]", "Thick"}], ",", 
+    RowBox[{"AxesLabel", "\[Rule]", 
+     RowBox[{"{", 
+      RowBox[{"\"\<Allocated Cores\>\"", ",", "\"\<Runtime (s)\>\""}], 
+      "}"}]}]}], "]"}]}]], "Input",
  CellChangeTimes->{{3.482032843149337*^9, 3.4820328767466927`*^9}, {
   3.48203292371563*^9, 3.482032975899053*^9}, {3.4820331661963253`*^9, 
-  3.482033207959025*^9}, {3.482033253874124*^9, 3.482033261433795*^9}}],
+  3.482033207959025*^9}, {3.482033253874124*^9, 3.482033261433795*^9}, {
+  3.482034192322468*^9, 3.482034194167729*^9}, {3.482034532388356*^9, 
+  3.482034532655243*^9}}],
 
 Cell[BoxData[
  GraphicsBox[{{}, {}, 
@@ -274,14 +270,14 @@ Cell[BoxData[
     FormBox["\"Runtime (s)\"", TraditionalForm]},
   AxesOrigin->{0, 0},
   ImageSize->{633., Automatic},
-  PlotLabel->FormBox[
-   "\"Strong Scaling: Core Count vs. Runtime\"", TraditionalForm],
   PlotRange->{{0., 256.}, {0., 85.7712500095}},
   PlotRangeClipping->True,
   PlotRangePadding->{
     Scaled[0.02], 
     Scaled[0.02]}]], "Output",
- CellChangeTimes->{3.4820332643805513`*^9}]
+ CellChangeTimes->{
+  3.4820332643805513`*^9, {3.4820341796857033`*^9, 3.482034194787776*^9}, 
+   3.482034533766899*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -301,36 +297,35 @@ Cell[BoxData[{
         RowBox[{"#", "[", 
          RowBox[{"[", "2", "]"}], "]"}]}]}], "}"}], "&"}], "/@", 
     "strongScaling"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"Show", "[", 
-  RowBox[{"{", 
-   RowBox[{
-    RowBox[{"ListLinePlot", "[", 
-     RowBox[{"strongSpeedup", ",", 
-      RowBox[{"PlotStyle", "\[Rule]", "Thick"}], ",", 
-      RowBox[{"AxesLabel", "\[Rule]", 
+ RowBox[{"strongPlotTwo", "=", 
+  RowBox[{"Show", "[", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"ListLinePlot", "[", 
+      RowBox[{"strongSpeedup", ",", 
+       RowBox[{"PlotStyle", "\[Rule]", "Thick"}], ",", 
+       RowBox[{"AxesLabel", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+         "\"\<Allocated Cores\>\"", ",", "\"\<Speedup vs. Sequential\>\""}], 
+         "}"}]}]}], "]"}], ",", 
+     RowBox[{"Plot", "[", 
+      RowBox[{"x", ",", 
        RowBox[{"{", 
-        RowBox[{
-        "\"\<Allocated Cores\>\"", ",", "\"\<Speedup vs. Sequential\>\""}], 
-        "}"}]}], ",", 
-      RowBox[{
-      "PlotLabel", "\[Rule]", 
-       "\"\<Strong Scaling: Core Count vs. Speedup\>\""}]}], "]"}], ",", 
-    RowBox[{"Plot", "[", 
-     RowBox[{"x", ",", 
-      RowBox[{"{", 
-       RowBox[{"x", ",", "0", ",", "50"}], "}"}], ",", 
-      RowBox[{"PlotStyle", "\[Rule]", 
-       RowBox[{"{", "Red", "}"}]}]}], "]"}], ",", 
-    RowBox[{"Plot", "[", 
-     RowBox[{"50", ",", 
-      RowBox[{"{", 
-       RowBox[{"x", ",", "0", ",", "256"}], "}"}], ",", 
-      RowBox[{"PlotStyle", "\[Rule]", 
-       RowBox[{"{", "Orange", "}"}]}]}], "]"}]}], "}"}], "]"}]}], "Input",
+        RowBox[{"x", ",", "0", ",", "50"}], "}"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"{", "Red", "}"}]}]}], "]"}], ",", 
+     RowBox[{"Plot", "[", 
+      RowBox[{"50", ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", "0", ",", "256"}], "}"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"{", "Orange", "}"}]}]}], "]"}]}], "}"}], "]"}]}]}], "Input",
  CellChangeTimes->{{3.482033274020062*^9, 3.482033360494548*^9}, {
-  3.482033401150625*^9, 3.482033401982089*^9}, {3.482033441655562*^9, 
-  3.482033445925308*^9}, {3.482033611143239*^9, 3.482033771613737*^9}, {
-  3.4820338165351067`*^9, 3.482033848560375*^9}}],
+   3.482033401150625*^9, 3.482033401982089*^9}, {3.482033441655562*^9, 
+   3.482033445925308*^9}, {3.482033611143239*^9, 3.482033771613737*^9}, {
+   3.4820338165351067`*^9, 3.482033848560375*^9}, {3.482034197266652*^9, 
+   3.48203419939261*^9}, 3.48203448919519*^9}],
 
 Cell[BoxData[
  GraphicsBox[{{{}, {}, 
@@ -377,8 +372,6 @@ YeOdVXlw/toXsrP5fPLhfKUWEQ/2ZQj+dHnur///I/gAsdbW8w==
     FormBox["\"Speedup vs. Sequential\"", TraditionalForm]},
   AxesOrigin->{0, 0},
   ImageSize->{648., Automatic},
-  PlotLabel->FormBox[
-   "\"Strong Scaling: Core Count vs. Speedup\"", TraditionalForm],
   PlotRange->{{0., 256.}, {0., 52.248511156256875`}},
   PlotRangeClipping->True,
   PlotRangePadding->{
@@ -386,7 +379,22 @@ YeOdVXlw/toXsrP5fPLhfKUWEQ/2ZQj+dHnur///I/gAsdbW8w==
     Scaled[0.02]}]], "Output",
  CellChangeTimes->{{3.482033323498349*^9, 3.482033360954837*^9}, 
    3.482033446251985*^9, {3.482033627351267*^9, 3.48203369144635*^9}, 
-   3.482033775671422*^9, {3.482033825002759*^9, 3.482033848981963*^9}}]
+   3.482033775671422*^9, {3.482033825002759*^9, 3.482033848981963*^9}, {
+   3.482034179839913*^9, 3.4820342000712957`*^9}, 3.482034489865534*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{"Export", "[", 
+  RowBox[{"\"\<strongPlotOne.pdf\>\"", ",", "strongPlotOne"}], "]"}]], "Input",\
+
+ CellChangeTimes->{{3.482034201597918*^9, 3.482034220245824*^9}, {
+  3.4820345027386103`*^9, 3.482034506367255*^9}}],
+
+Cell[BoxData["\<\"strongPlotOne.pdf\"\>"], "Output",
+ CellChangeTimes->{{3.482034214576268*^9, 3.4820342206416283`*^9}, {
+  3.482034501515204*^9, 3.482034536301401*^9}}]
 }, Open  ]]
 },
 WindowSize->{811, 1006},
@@ -408,20 +416,24 @@ Notebook[{
 Cell[545, 20, 1025, 22, 43, "Input"],
 Cell[CellGroupData[{
 Cell[1595, 46, 1150, 25, 58, "Input"],
-Cell[2748, 73, 4005, 73, 433, "Output"]
+Cell[2748, 73, 4027, 73, 433, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[6790, 151, 1569, 41, 88, "Input"],
-Cell[8362, 194, 1957, 39, 404, "Output"]
+Cell[6812, 151, 1506, 39, 73, "Input"],
+Cell[8321, 192, 1898, 37, 392, "Output"]
 }, Open  ]],
-Cell[10334, 236, 308, 8, 27, "Input"],
+Cell[10234, 232, 308, 8, 27, "Input"],
 Cell[CellGroupData[{
-Cell[10667, 248, 600, 13, 43, "Input"],
-Cell[11270, 263, 833, 20, 390, "Output"]
+Cell[10567, 244, 639, 13, 43, "Input"],
+Cell[11209, 259, 821, 20, 378, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[12140, 288, 1643, 44, 103, "Input"],
-Cell[13786, 334, 2784, 54, 387, "Output"]
+Cell[12067, 284, 1662, 43, 88, "Input"],
+Cell[13732, 329, 2769, 53, 375, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[16538, 387, 237, 5, 27, "Input"],
+Cell[16778, 394, 169, 2, 27, "Output"]
 }, Open  ]]
 }
 ]
