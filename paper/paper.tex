@@ -83,7 +83,7 @@ $Y$ depends on an additional external function, $P$, the Legendre polynomial (eq
 
 \subsection{Laguerre and Legendre\label{laguerreLegendre}}
 
-Key to the evaluation of Schr\"{o}dinger's equation are the Laguerre and Legendre polynomials. Unfortunately, the generation of both requires symbolically solving differential equations. Since OpenCL (rightfully) lacks a symbolic differential equation solver (and the implementation of such a program is far outside of the scope of this project), we have added to our kernel a simple table of the first few polynomials, computed with Mathematica. This limits the range of input $n, l, m$ parameters which can be used with this program, but extending the tables is very simple and requires only patience.
+Key to the evaluation of Schr\"{o}dinger's equation are the Laguerre and Legendre polynomials. Unfortunately, the generation of both requires symbolically solving differential equations. \cite{legendreCite} Since OpenCL (rightfully) lacks a symbolic differential equation solver (and the implementation of such a program is far outside of the scope of this project), we have added to our kernel a simple table of the first few polynomials, computed with Mathematica. This limits the range of input $n, l, m$ parameters which can be used with this program, but extending the tables is very simple and requires only patience.
 
 The generating differential equations for these polynomials are as follows:
 
@@ -101,19 +101,33 @@ where $\tilde{F}$ is Gauss' hypergeometric function, which we don't care about s
 
 \section{Implementation}
 
+Our implementation is twofold: an OpenCL kernel (written in the C-like OpenCL kernel language) which performs the evaluation of all of the Schr\"{o}dinger's equation samples required for a single pixel of the output image, and a Python script which parses command line options, uses PyOpenCL to load and run the kernel and PIL to create the output image, and performs timed benchmarks.
+
+The decision was made during the implementation phase to redefine the Bohr radius so that $a=1$; this was done in order to keep intermediate numbers within the range of single-precision floating point values, as OpenCL doesn't currently support native double-precision math on any of the GPUs available for benchmarking. Since we're only using this software to generate visualizations, this doesn't affect the output; it simply scales the distances away from the atomic level.
+
 \section{Hardware}
 
 Benchmarks will be performed on a number of different computation devices across a few different computers:
 
+\subsection{GPUs}
+
 \begin{itemize}
 
-\item ATI Radeon 4890, 800$\times$850MHz, 1GB VRAM, 250\$\footnote{All hardware prices listed are approximate launch prices. Prices of older hardware, especially the Core 2 Quad, have dropped significantly since introduction.\label{fn:prices}}
+\item ATI Radeon 4890, 800$\times$850MHz, 1GB, 250\$\footnote{All hardware prices listed are approximate launch prices. Prices of older hardware, especially the Core 2 Quad, have dropped significantly since introduction.\label{fn:prices}}
 
-\item Intel Core i7 620M, 2$\times$3333MHz, 4GB RAM, 332\$\footref{fn:prices}
+\item NVIDIA GeForce 8600M GT, 32$\times$475MHz, 512MB, ???\$\footref{fn:prices}
 
-\item Intel Core 2 Quad Q6600, 4$\times$3000MHz, 4GB RAM, 851\$\footref{fn:prices}
+\end{itemize}
 
-\item Intel Atom N270, 1$\times$1600MHz, 2GB RAM, 44\$\footref{fn:prices}
+\subsection{CPUs}
+
+\begin{itemize}
+
+\item Intel Core i7 620M, 2$\times$3333MHz, 4GB, 332\$\footref{fn:prices}
+
+\item Intel Core 2 Quad Q6600, 4$\times$3000MHz, 4GB, 851\$\footref{fn:prices}
+
+\item Intel Core 2 Duo E7200, 2$\times$2530MHz, 8GB, 133\$\footref{fn:prices}
 
 \end{itemize}
 
@@ -125,6 +139,18 @@ Also, it should be noted that while each core on a given CPU could potentially b
 
 \subsection{Large- vs. Small-scale Parallelism}
 
+\begin{figure}
+    \includegraphics[width=84.5mm]{runtimePlot.pdf}
+    \caption{Runtime vs. Resolution on All Hardware}
+    \label{fig:runtimePlot}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=84.5mm]{speedupPlot.pdf}
+    \caption{Runtime vs. Resolution on All Hardware}
+    \label{fig:runtimePlot}
+\end{figure}
+
 \subsection{Strong Scaling}
 
 In order to measure the strong scalability of our implementation, we fix the problem size and vary the number of processing units used to compute it. For this benchmark, we will fix the image at $400\times400$ pixels, requiring $320,000,000$ total samples, and we will vary the number of cores of the 4890 that we use.
@@ -132,12 +158,16 @@ In order to measure the strong scalability of our implementation, we fix the pro
 \begin{figure}
     \includegraphics[width=84.5mm]{strongPlotOne.pdf}
     \caption{Core Count vs. Runtime on the 4890 with a fixed resolution ($400\times400$)}
+    \label{fig:strongPlotOne}
 \end{figure}
 
 \begin{figure}
     \includegraphics[width=84.5mm]{strongPlotTwo.pdf}
-    \caption{Core Count vs. Speedup (measured against a single-core run) on the 4890 with a fixed resolution ($400\times400$); the orange line is the theoretical maximum speedup, given linear scaling and 50 execution units (800 cores / 16 cores per unit); the red line is a linear (1:1) speedup curve}
+    \caption{Core Count vs. Speedup (measured against the single-core run) on the 4890 with a fixed resolution ($400\times400$); the orange line is the theoretical maximum speedup, given linear scaling and 50 execution units (800 cores / 16 cores per unit); the red line is a linear speedup curve}
+    \label{fig:strongPlotTwo}
 \end{figure}
+
+One can see in figure \ref{fig:strongPlotTwo} that this implementation is strongly scalable; the speedup is almost perfectly linear as the core count increases. It should be noted that since the 4890 only has a maximum of 50 compute units, the linear increase is only maintained until we reach 50 cores; after that, the performance gains plateau as they should.
 
 \subsection{Cost Effectiveness of Hardware}
 
@@ -152,6 +182,8 @@ All of the code developed for this project is available under the two-clause BSD
 \url{http://github.com/hortont424/orbitals}
 
 \url{git://github.com/hortont424/orbitals.git}
+
+The code has only been tested with the Apple and ATI OpenCL compilers, but should work with few to no changes on NVIDIA's SDK.
 
 \bibliographystyle{acmsiggraph}
 \nocite{*}
