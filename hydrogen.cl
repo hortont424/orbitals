@@ -67,7 +67,7 @@ int L(int a, int b, int x)
         else if(b == 4)
             return 1680 * (1680 - (1344 * x) + (336 * x * x) - (32 * x * x * x) + (x * x * x * x));
     }
-    
+
     return 0.0f;
 }
 
@@ -139,7 +139,7 @@ float P(int a, int b, float x)
         else if(b == 4)
             return 105.0f * pow((x * x) - 1.0f, 2.0f);
     }
-    
+
     return 0.0f;
 }
 
@@ -147,7 +147,7 @@ float EP(float m)
 {
     if(m >= 0)
         return pow(-1.0f, m);
-    
+
     return 1.0f;
 }
 
