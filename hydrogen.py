@@ -97,10 +97,12 @@ def main():
 
     params = tuple([int(a) for a in options.params.split(",")])
 
-    if options.useCPU:
-        main.ctx = cl.Context(dev_type=cl.device_type.CPU)
-    else:
-        main.ctx = cl.Context(dev_type=cl.device_type.GPU)
+    #if options.useCPU:
+    #    main.ctx = cl.Context(dev_type=cl.device_type.CPU)
+    #else:
+    #    main.ctx = cl.Context(dev_type=cl.device_type.GPU)
+
+    main.ctx = cl.create_some_context()
 
     # Output device(s) being used for computation
     if not (options.benchmark or options.longBenchmark or options.onebench):
