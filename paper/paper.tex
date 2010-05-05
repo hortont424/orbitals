@@ -5,6 +5,7 @@
 \usepackage{parskip}
 \usepackage{graphicx}
 \usepackage{footmisc}
+\usepackage{amsmath}
 \usepackage{url}
 \onlineid{0}
 
@@ -42,17 +43,17 @@ asdfasdfadsf asdf adsf asdf asdf adfasdf adsf adf asfd
 From \cite{quantumBook}, we find the single-electron solution to Schr\"{o}dinger's equation:
 
 \begin{equation}\label{psi}
-\psi\left(n, l, m\right)=\psi_c\left(n, l\right)
-\mathit{e}^{-r/na}
+\psi\left(n, l, m\right)=\psi_c
+\left(\mathit{e}^{-r/na}\right)
 \left(\frac{2r}{na}\right)^l
 \left[L_{n-l-1}^{2l+1}
     \left(\frac{2r}{na}\right)\right]
-Y_l^m\left(\theta,\phi\right)
+Y_l^m\left(\theta,\phi\right),
 \end{equation}
 
 \begin{equation}\label{psiConstant}
-\psi_c\left(n, l\right)=\sqrt{\left(\frac{2}{na}\right)^3
-    \frac{\left(n-l-1\right)!}{2n\left[\left(n+l\right)!\right]^3}}
+\psi_c=\sqrt{\left(\frac{2}{na}\right)^3
+    \frac{\left(n-l-1\right)!}{2n\left[\left(n+l\right)!\right]^3}}.
 \end{equation}
 
 One will notice that $\psi_c$ is independent of the coordinates of evaluation, $\left(\theta, \phi, r\right)$, so it --- as an obvious optimization --- can be computed once and cached for the entire image.
@@ -61,27 +62,42 @@ Also, $\psi$ depends on two external functions: $Y$, the spherical harmonic equa
 
 \subsection{Spherical Harmonics\label{sphericalHarmonics}}
 
+Gotta write a blurb here:
+
 \begin{equation}\label{yFunc}
 Y_l^m\left(\theta,\phi\right)=\epsilon
 \sqrt{\frac{\left(2l+1\right)}{4\pi}
     \frac{\left(l-\left|m\right|\right)!}{\left(l+\left|m\right|\right)!}}
 \mathit{e}^{{\rm i}m\phi}
-P^m_l\left(\cos\theta\right)
+P^m_l\left(\cos\theta\right),
+\end{equation}
+
+\begin{equation}\label{yEpsilon}
+\epsilon=\begin{cases}
+\left(-1\right)^m & \text{$m\ge0$} \\
+1 & \text{$m<0$}
+\end{cases}.
 \end{equation}
 
 $Y$ depends on an additional external function, $P$, the Legendre polynomial (equation \ref{legendre}).
 
 \subsection{Laguerre and Legendre\label{laguerreLegendre}}
 
-Key to the evaluation of Schr\"{o}dinger's equation are the Laguerre and Legendre polynomials. Unfortunately, 
+Key to the evaluation of Schr\"{o}dinger's equation are the Laguerre and Legendre polynomials. Unfortunately, the generation of both requires symbolically solving differential equations. Since OpenCL (rightfully) lacks a symbolic differential equation solver (and the implementation of such a program is far outside of the scope of this project), we have added to our kernel a simple table of the first few polynomials, computed with Mathematica. This limits the range of input $n, l, m$ parameters which can be used with this program, but extending the tables is very simple and requires only patience.
+
+The generating differential equations for these polynomials are as follows:
 
 \begin{equation}\label{laguerre}
-L^\alpha_n\left(x\right)=\frac{x^{-\alpha}e^x}{n!}\frac{d^n}{dx^n}\left(e^{-x}x^{n+\alpha}\right)
+L^\alpha_n\left(x\right)=\frac{x^{-\alpha}e^x}{n!}\frac{d^n}{dx^n}\left(e^{-x}x^{n+\alpha}\right),
 \end{equation}
 
 \begin{equation}\label{legendre}
-P=
+P^u_v\left(z\right)=\frac{\left(1+z\right)^{\mu/2}}{\left(1-z\right)^{\mu/2}}
+\tilde{F}_{2,1}
+\left(-v,v+1;1-\mu;\frac{1-z}{2}\right),
 \end{equation}
+
+where $\tilde{F}$ is Gauss' hypergeometric function, which we don't care about since we're simply allowing Mathematica to evaluate it and using the comparatively simple symbolic results in our table.
 
 \section{Implementation}
 
@@ -130,5 +146,7 @@ All of the code developed for this project is available under the two-clause BSD
 \bibliographystyle{acmsiggraph}
 \nocite{*}
 \bibliography{paper}
+
+MAKE SURE TO CITE MATHWORLD
 
 \end{document}
