@@ -4,6 +4,7 @@
 \usepackage{times}
 \usepackage{parskip}
 \usepackage{graphicx}
+\usepackage{footmisc}
 \onlineid{0}
 
 \title{Plotting the Single-Electron Solution to Schr\"{o}dinger's Equation with OpenCL}
@@ -18,9 +19,17 @@
 
 \section{Abstract}
 
-The realm of physics provides many readily parallelizable algorithms which also happen to produce attractive visualizations.
+The realm of physics provides many readily parallelizable algorithms --- often involving the simple evaluation of a function at an enormous number of points in space --- which also happen to produce attractive visualizations. One such visualization is that of the probability distribution of the single electron within a hydrogen atom (or He$^+$, Li$^{2+}$, and so on). By evaluating Schr\"{o}dinger's equation at millions of points, one can construct a representation of the likely location of the electron --- the orbital cloud, if you will. Luckily, the evaluation of this function at a particular point is entirely independent of nearby points, so it is effectively perfect for parallelization. We will use OpenCL to develop and benchmark (on a varied array of hardware, from dated CPUs to very modern GPUs) an implementation of this algorithm which will produce a simple --- but attractive --- image of the atomic orbital of the single-electron hydrogen atom.
 
 \section{Introduction}
+
+asdfasdfadsf asdf adsf asdf asdf adfasdf adsf adf asfd
+
+asdfasdfadsf asdf adsf asdf asdf adfasdf adsf adf asfd
+
+asdfasdfadsf asdf adsf asdf asdf adfasdf adsf adf asfd
+
+asdfasdfadsf asdf adsf asdf asdf adfasdf adsf adf asfd
 
 \section{Physics}
 
@@ -28,7 +37,27 @@ The realm of physics provides many readily parallelizable algorithms which also 
 
 \section{Software and Hardware}
 
+Benchmarks will be performed on a number of different OpenCL compute devices across a few different computers:
+
+\begin{itemize}
+
+\item ATI Radeon 4890, 800$\times$850MHz, 1GB VRAM, 250\$\footnote{All hardware prices listed are approximate launch prices.\label{fn:prices}}
+
+\item Intel Core i7 620M, 2$\times$3333MHz, 4GB RAM, 332\$\footref{fn:prices}
+
+\item Intel Core 2 Quad Q6600, 4$\times$3000MHz, 4GB RAM, 851\$\footref{fn:prices}
+
+\item Intel Atom N270, 1$\times$1600MHz, 2GB RAM, 44\$\footref{fn:prices}
+
+\end{itemize}
+
 \section{Results}
+
+\subsection{Large- vs. Small-scale Parallelism}
+
+\subsection{Strong Scaling}
+
+\subsection{Cost Effectiveness of Hardware}
 
 \section{Future Work}
 
