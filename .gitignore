@@ -1,2 +1,6 @@
 .DS_Store
 *.pyc
+paper.aux
+paper.log
+paper.pdf
+paper.synctex.gz
