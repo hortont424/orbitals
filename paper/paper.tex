@@ -1,7 +1,5 @@
 \documentclass{acmsiggraph}
 
-\usepackage[scaled=.92]{helvet}
-\usepackage{times}
 \usepackage{parskip}
 \usepackage{graphicx}
 \usepackage{footmisc}
@@ -9,7 +7,7 @@
 \usepackage{url}
 \onlineid{0}
 
-\title{Plotting the Single-Electron Solution to Schr\"{o}dinger's Equation with OpenCL}
+\title{\Large Plotting the Single-Electron Solution to Schr\"{o}dinger's Equation with OpenCL}
 
 \author{Tim Horton\thanks{e-mail: hortot2@rpi.edu}\\Rensselaer Polytechnic Institute}
 
@@ -62,9 +60,11 @@ One will notice that $\psi_c$ is independent of the coordinates of evaluation, $
 
 Also, $\psi$ depends on two external functions: $Y$, the spherical harmonic equation (equation \ref{yFunc}), and $L$, the Laguerre polynomial (equation \ref{laguerre}).
 
-\subsection{Spherical Harmonics\label{sphericalHarmonics}}
+\subsection{Spherical Harmonics}
 
-Gotta write a blurb here:
+\label{sphericalHarmonics}
+
+$Y$, a solution to Laplace's spherical harmonic function, provides the angular component of $\psi$:
 
 \begin{equation}\label{yFunc}
 Y_l^m\left(\theta,\phi\right)=\epsilon
@@ -83,7 +83,9 @@ P^m_l\left(\cos\theta\right),
 
 $Y$ depends on an additional external function, $P$, the Legendre polynomial (equation \ref{legendre}).
 
-\subsection{Laguerre and Legendre\label{laguerreLegendre}}
+\subsection{Laguerre and Legendre}
+
+\label{laguerreLegendre}
 
 Key to the evaluation of Schr\"{o}dinger's equation are the Laguerre and Legendre polynomials. Unfortunately, the generation of both requires symbolically solving differential equations. \cite{legendreCite} Since OpenCL (rightfully) lacks a symbolic differential equation solver (and the implementation of such a program is far outside of the scope of this project), we have added to our kernel a simple table of the first few polynomials, computed with Mathematica. This limits the range of input $n, l, m$ parameters which can be used with this program, but extending the tables is very simple and requires only patience.
 
@@ -159,6 +161,8 @@ Also, it should be noted that while each core on a given CPU could potentially b
 
 \section{Results}
 
+Each benchmark point is the minimum of five trials.
+
 \subsection{Strong Scaling}
 
 \label{strongScaling}
@@ -221,7 +225,35 @@ It should be noted that these speedup values are across different pieces of hard
 
 One oft-cited measure of the performance of a computational device is its {\it performance-per-dollar}; this is especially of interest for consumers with budgets or people building large computation clusters. In order to measure performance-per-dollar, we have to define {\it performance} in the context of our problem. In all of the plots in this section, performance is measured as the number of samples per second. Figures \ref{fig:costEffectiveness}, \ref{fig:transistorPlot}, and \ref{fig:wattPlot} all use a 500$\times$500 image, with 2000 samples per pixel, for $500,000,000$ total samples.
 
+Figure \ref{fig:costEffectiveness} illustrates the performance-per-dollar of our four devices. As is quite evident already, the 4890 --- though in the same price range as most of the other devices, and significantly cheaper than the Core 2 Quad --- manages to dominate the chart. It's safe to say that if an institution is looking into buying a large number of a particular device for scientific computation, they should seriously consider looking into high-end graphics cards. Indeed; each dollar spent on a 4890 goes 18 times farther, performance-wise, than it would if spent on the next-most-cost-effective chip, the Core 2 Duo E7200.
+
+Another important point when considering the cost of various pieces of hardware is how much it will cost to run. One way to measure this is to consider the power efficiency of the chip, in terms of performance-per-watt. Again using the same measure of performance from our performance-per-dollar comparison, we can see in figure \ref{fig:wattPlot} that the GPU continues to dominate, even though it requires three times more energy to run than its closest competitor, the Core 2 Quad. As one might expect, the older --- thus, less power efficient --- Core 2 Duo falls behind the other CPUs on this scale: though it was the performance-per-dollar winner out of the three CPUs, it would cost significantly more than the other two to run for any period of time.
+
 \section{Future Work}
+
+There are quite a few things which have come up while developing this project that would be interesting to implement if we were to continue work on the codebase.
+
+\subsection{Camera Transformation}
+
+\label{cameraTransformation}
+
+One key feature that is missing from the current implementation is the ability to manipulate the "camera" location, changing your viewport on the orbital cloud. Implementing this would add a bit of complexity, but would allow for interesting video rendering --- for example, video of the camera spinning around the atom, providing a better idea of the actual shape of the cloud. It can be hard --- without prior knowledge --- to comprehend the shape of the cloud from our current visualization.
+
+In addition, if the number of samples was sufficiently reduced, or a fast enough video card was obtained, one could implement {\it live} manipulation of the camera's view, which could assist in inspection of the orbital cloud to an even greater extent.
+
+\subsection{Slicing}
+
+\begin{figure}
+    \includegraphics[width=84.5mm]{320-slice.png}
+    \caption{A slice through the 3-2-0 orbital of the hydrogen atom}
+    \label{fig:slice}
+\end{figure}
+
+Section \ref{cameraTransformation} covered the ideal solution to the problem of comprehending the shape of the orbital from our 2D representation --- however, if that solution proved to be too challenging, one could instead generate an animation of slices through the cloud, each slice being similar to figure \ref{fig:slice}
+
+\subsection{Coloring}
+
+\subsection{Generalization of Parameters}
 
 \section{Conclusion}
 
