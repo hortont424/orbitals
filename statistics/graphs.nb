@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       145,          7]
-NotebookDataLength[     21078,        495]
-NotebookOptionsPosition[     20213,        461]
-NotebookOutlinePosition[     20554,        476]
-CellTagsIndexPosition[     20511,        473]
+NotebookDataLength[     51314,       1246]
+NotebookOptionsPosition[     50080,       1201]
+NotebookOutlinePosition[     50419,       1216]
+CellTagsIndexPosition[     50376,       1213]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -40,7 +40,14 @@ Cell[BoxData[{
      RowBox[{
       RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
       "\"\<Core2Quad.csv\>\""}], ",", "\"\<CSV\>\""}], "]"}]}], 
-  ";"}]}], "Input",
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"oldcpu", "=", 
+   RowBox[{"Import", "[", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"NotebookDirectory", "[", "]"}], "<>", "\"\<E7200.csv\>\""}], 
+     ",", "\"\<CSV\>\""}], "]"}]}], ";"}]}], "Input",
  CellChangeTimes->{{3.481937371217428*^9, 3.481937405491331*^9}, {
    3.481937923795402*^9, 3.4819379645814543`*^9}, {3.4819381688292294`*^9, 
    3.481938201935914*^9}, {3.481938407142447*^9, 3.481938409097259*^9}, {
@@ -49,7 +56,8 @@ Cell[BoxData[{
    3.482012443339903*^9, 3.48201245653048*^9}, {3.482012519378624*^9, 
    3.4820125204709177`*^9}, {3.482012640223933*^9, 3.4820127215782547`*^9}, {
    3.482032801254109*^9, 3.4820328098133907`*^9}, {3.482059311320084*^9, 
-   3.4820593328947067`*^9}, 3.4820778003173656`*^9}],
+   3.4820593328947067`*^9}, 3.4820778003173656`*^9, {3.4820873575904818`*^9, 
+   3.482087364166018*^9}}],
 
 Cell[CellGroupData[{
 
@@ -60,7 +68,7 @@ Cell[BoxData[
     RowBox[{"ListLinePlot", "[", 
      RowBox[{
       RowBox[{"{", 
-       RowBox[{"gpu", ",", "cpu", ",", "quadcpu"}], "}"}], ",", 
+       RowBox[{"gpu", ",", "quadcpu", ",", "cpu", ",", "oldcpu"}], "}"}], ",", 
       RowBox[{"PlotStyle", "\[Rule]", "Thick"}], ",", 
       RowBox[{"PlotRange", "\[Rule]", "All"}], ",", 
       RowBox[{"AxesOrigin", "\[Rule]", 
@@ -84,6 +92,11 @@ Cell[BoxData[
           RowBox[{"900", ",", "25"}], "}"}]}], "]"}], ",", 
        "\[IndentingNewLine]", 
        RowBox[{"Text", "[", 
+        RowBox[{"\"\<E7200\>\"", ",", 
+         RowBox[{"{", 
+          RowBox[{"800", ",", "300"}], "}"}]}], "]"}], ",", 
+       "\[IndentingNewLine]", 
+       RowBox[{"Text", "[", 
         RowBox[{"\"\<620M\>\"", ",", 
          RowBox[{"{", 
           RowBox[{"900", ",", "210"}], "}"}]}], "]"}]}], 
@@ -98,7 +111,9 @@ Cell[BoxData[
   3.482012440724991*^9, 3.4820124408671227`*^9}, {3.482059317457019*^9, 
   3.482059319495502*^9}, {3.482077783637093*^9, 3.482078074793792*^9}, {
   3.482078114532477*^9, 3.482078166873848*^9}, {3.482078674196197*^9, 
-  3.482078676520582*^9}}],
+  3.482078676520582*^9}, {3.4820873661027403`*^9, 3.482087400683463*^9}, {
+  3.482089580285769*^9, 3.482089582773435*^9}, {3.48208962638836*^9, 
+  3.482089631138961*^9}}],
 
 Cell[BoxData[
  GraphicsBox[{{{}, {}, 
@@ -128,6 +143,31 @@ D3mDHHVizRr8C4besRA=
       "]]}, 
     {Hue[0.9060679774997897, 0.6, 0.6], Thickness[Large], 
      LineBox[CompressedData["
+1:eJwtkn9MlHUcxz8ecB4otxtO1JO4k5qdsAsiLyRL35EmgRYBianYcWCMIg8E
++c3dAxxwcIDoYvSPdSWOWbNYrUVO4eauFjULTYVYGh2WTEBYFD+i9s18Prc9
+e/Z6nud9r3s9uw0Wa+phBRHtv3/8f37wkQ7AFE9S7hmxXb5wCN5xoXMOKfAA
+YcY3OpLitUqZpSw0h5O75nSgzB4Lzk+JaVu+RmbKwaNq0lT3hPD+MLxCWOnf
+Vbx/HZWzIrozdjXvc5EZSJ7kq2t5n4dyNZl1Ri3v38A7c+IX3/lw3r8J5Zzo
+3l2o530+fELEeZI38P4I/JQkYTiC91Zo91GZofAR5gL0majsYNhGmUcLoB4V
+GSa9gb+/EOkecXzZ2U0y649C+6lYE+qKYt9RmDW0ZXDFYzKbi3DumphfyI9m
+fzEMBnJ/filGZncxim+KpffWx7L/GC7NCp3hDvPoMTxzWUyMVm1mfwkmI2hl
+YpqJ/aVQE/XWZz/J/lJIJrqgOBXH/jK4l8SE0RjP/nKk3BDZ3VFPsb8c18Jo
+wTaylf0VKJoSUarFp9lfgW/HxHeKvdvYX4m3FSSFfLKd/VUI1pJyqA/sr8LZ
+P8RY6lvPsr8am++K6CMPJbDfhrwAijQHP8d+G3QaUv81xAw7EibFlKpjB/vt
+UAVQRFn6Tr4v4fY6unUm4nmZ2yX0TouBdcpd/LyE7mlxOvUWc0wNPp4XnQMX
+Evn318C3lrq0XS/IPFiD9CVR+n1PEvfUYmMQDfc6kmUuqEVFAKXkOndzXy2a
+VJS4x7pHZk0dUkPp5KbKF7m3DrYJYY0rfknmnjooguj6QFoK9zuwnOjnq/3M
+KQ6s96PFyMSX+X04MONPettl5hkHSlbQn15LKvfXw7goKG+cub0et/1J96Ur
+jfvrYVJQtCssnfsboJsT/Z91MUsNSAqmnOVPvML9DXg3iHx3rzDrG+G8/ycZ
+t+zl/kZ86E9X9CEZ3N+IRBWF+9zMGiemFoVmIH0f9zuhDaKhVb8y9zgxspKm
+hlte5f4mKB+n6d+wn/ubkOEVgcYbzO4m+EXS5Ij9APc3wWGh8YsxB7m/GaEV
+IunOTeb2ZmR5xK7uE5nc34wfvxaN17cd4n4XfnpfXAzxf437Xfi7Wvz+1UfM
+gy58EUr9Y3Fm7m9BwaDd1dHBXNCCTp89dmye2dOCKgXZtiRncX8r4oxSQkwP
+s7kVTo89szTEwv2t+McjTq0pZ6Y2bH2Y7i2MMKe0YWcCrZ5FNve3QXXPvqzk
+A+aZNngnRJ9XncP9x1H5gzgninLwH3Yum4k=
+      "]]}, 
+    {Hue[0.1421359549995791, 0.6, 0.6], Thickness[Large], 
+     LineBox[CompressedData["
 1:eJwtkgtMVXUcx39qvALsmtC1UeM1UanZTYO0LvW1QjSugJIIIpdHIE8viJBi
 yD28H5d7YbpSkRHTNrE1ZIytuYVQOJmCgg8ESSYyCQkvuwyDpRf+led3trOz
 zznnez77bMczIXNX0lIi2vvf+f/15SFFY8aRoM20hXxDCx8HGv1gzkFmxGHE
@@ -151,33 +191,34 @@ p/eZ+w2o8pR0OZr93F8N92v6mLQh5qxq2K6hW5qdydxfjRPj+h0zvcwKIz7s
 FCm7v0zhfiOcZkWUuou5xYiAm0LnFpLK/SYMe0vO6beZw0wo9JT+UJnSuN+E
 Oj+p33yX2WJCdrf+fHddOvfX4L1JUV64JAP/AkoItYs=
       "]]}, 
-    {Hue[0.1421359549995791, 0.6, 0.6], Thickness[Large], 
+    {Hue[0.37820393249936934`, 0.6, 0.6], Thickness[Large], 
      LineBox[CompressedData["
-1:eJwtkn9MlHUcxz8ecB4otxtO1JO4k5qdsAsiLyRL35EmgRYBianYcWCMIg8E
-+c3dAxxwcIDoYvSPdSWOWbNYrUVO4eauFjULTYVYGh2WTEBYFD+i9s18Prc9
-e/Z6nud9r3s9uw0Wa+phBRHtv3/8f37wkQ7AFE9S7hmxXb5wCN5xoXMOKfAA
-YcY3OpLitUqZpSw0h5O75nSgzB4Lzk+JaVu+RmbKwaNq0lT3hPD+MLxCWOnf
-Vbx/HZWzIrozdjXvc5EZSJ7kq2t5n4dyNZl1Ri3v38A7c+IX3/lw3r8J5Zzo
-3l2o530+fELEeZI38P4I/JQkYTiC91Zo91GZofAR5gL0majsYNhGmUcLoB4V
-GSa9gb+/EOkecXzZ2U0y649C+6lYE+qKYt9RmDW0ZXDFYzKbi3DumphfyI9m
-fzEMBnJ/filGZncxim+KpffWx7L/GC7NCp3hDvPoMTxzWUyMVm1mfwkmI2hl
-YpqJ/aVQE/XWZz/J/lJIJrqgOBXH/jK4l8SE0RjP/nKk3BDZ3VFPsb8c18Jo
-wTaylf0VKJoSUarFp9lfgW/HxHeKvdvYX4m3FSSFfLKd/VUI1pJyqA/sr8LZ
-P8RY6lvPsr8am++K6CMPJbDfhrwAijQHP8d+G3QaUv81xAw7EibFlKpjB/vt
-UAVQRFn6Tr4v4fY6unUm4nmZ2yX0TouBdcpd/LyE7mlxOvUWc0wNPp4XnQMX
-Evn318C3lrq0XS/IPFiD9CVR+n1PEvfUYmMQDfc6kmUuqEVFAKXkOndzXy2a
-VJS4x7pHZk0dUkPp5KbKF7m3DrYJYY0rfknmnjooguj6QFoK9zuwnOjnq/3M
-KQ6s96PFyMSX+X04MONPettl5hkHSlbQn15LKvfXw7goKG+cub0et/1J96Ur
-jfvrYVJQtCssnfsboJsT/Z91MUsNSAqmnOVPvML9DXg3iHx3rzDrG+G8/ycZ
-t+zl/kZ86E9X9CEZ3N+IRBWF+9zMGiemFoVmIH0f9zuhDaKhVb8y9zgxspKm
-hlte5f4mKB+n6d+wn/ubkOEVgcYbzO4m+EXS5Ij9APc3wWGh8YsxB7m/GaEV
-IunOTeb2ZmR5xK7uE5nc34wfvxaN17cd4n4XfnpfXAzxf437Xfi7Wvz+1UfM
-gy58EUr9Y3Fm7m9BwaDd1dHBXNCCTp89dmye2dOCKgXZtiRncX8r4oxSQkwP
-s7kVTo89szTEwv2t+McjTq0pZ6Y2bH2Y7i2MMKe0YWcCrZ5FNve3QXXPvqzk
-A+aZNngnRJ9XncP9x1H5gzgninLwH3Yum4k=
+1:eJwtkn1QFHUch38Hp0KRUAIWKRwxAgkKgQdoKB9EkcRRQKWQiw44lBeB415E
+6M5b4Hg/mEpw+gPHq5HiijSSSmv0zqamFA2mmaZJJyAgNB2EQl4s6Be1353Z
+uXl277PPPjPrn1OalufEGMtYOv/7/f8QMmFb5O4TsasgXsiC0oXJDIHeIkMJ
+d08m08T6iCxk4wxjU7dlviI7cvCRhFk7k/1pr0LqAl89+DCA9nnYGsqQ3xtI
++8P4KYJ1BWmfp/0RvHuL27VhobQvwHUf1rUuMIz2hZCM8Q8zIl+gfRHaRrif
+02AE7Y+i/RZfce6zTbQvwUgoG+7WR9G+FMM/8NxL2THEauh+5pNyxRaRh9Vw
+Xs4EVhFLzy9D9xRPHqrZJrJMA+kCz54rAPk0GPdgf+3qjxdZqcW1Rf6MbmUC
++XVIv8v19Vt2iGzVoXA5U/VZdpJfj+A5/mPqtUTy6zHxgJeu80oi/zEEzPNI
+n5Mvkb8c2mVMp5rcTf5ylHiwKb1mD/mPo3Oe13ss20v+Crg8y1RDyfvIX4EF
+N7Z5lyqF/JVom+WZY5Gp5K/Eoz+5QcqJhdcx8DiTVQ6mkd+AyUf8W9er+8lv
+QNsCL95/4QD5jbjswr54qvYg+U9AL2F+IcZ08p+AzJWFu+W8TH4TXJ3ZmgsZ
+r5DfhDe/47nnVRl0X4D9HS7tyjgk8hsChnp52lpFJv1fwGV3tu+GUSFyeBU6
+E5a+P/Or9P5VuFHN9rq1Z4k8UIWxEOYZYHuNeqqhuGuadS1WiqyuxnYvYcfx
+GWJHNd7qMyX1W7JF9qjBVTkb3+qbQ701ODht+rLya+KPl3gD+6ZDkUv9ZoTF
+sfgPolQip5hxKliQTncQW80oumIKT4zOE3nKjA1Bwnj3A2LU4p8Rk/fG2sPU
+X4vkYa4YfPEI9dfC9Rduyx0lDq+D102Tn9CeT/11uOgpeJ7fWUD9dZBECb0X
+JYXUX4+oGdNoxOfE6nrI75mar2iKqL8eZ9cIbx8KOUr9DehxYZcmfidWNmBk
+G/O+11NM/Q34fpbbOkpLqL8RPc5svW19KfU3ou8hl4/PEFsbcfYOX6uvVlN/
+IxKkbOKJ68RogmQxjvnLy6i/Caf/sLfkniEebkKYr+D0/goN9TfjsTl+7nQh
+sdCMUYnDrWyIeKAZG+/Y52/v0VK/BcHT9rloI7HaAu/7cVlj94kdFhz4O253
+YJaO+lvw5EqH8ZObxMoWJC1yQ2K8nvpbEPMc+jd9Ssxakc7t+ZuDjlF/K75y
+Zikx7xFbW9H3G294Orqc+ltx8lf7qtWnyvEv0++gdw==
       "]]}}, {
     InsetBox["\<\"Q6600\"\>", {900, 155}], 
     InsetBox["\<\"4890\"\>", {900, 25}], 
+    InsetBox["\<\"E7200\"\>", {800, 300}], 
     InsetBox["\<\"620M\"\>", {900, 210}]}},
   AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
   Axes->True,
@@ -192,7 +233,13 @@ A+aZNngnRJ9XncP9x1H5gzgninLwH3Yum4k=
  CellChangeTimes->{{3.482077821560247*^9, 3.482077864091032*^9}, {
    3.48207789650002*^9, 3.4820780035222187`*^9}, {3.482078034147172*^9, 
    3.48207807515836*^9}, {3.4820781332039623`*^9, 3.482078167107934*^9}, 
-   3.482078676963018*^9, 3.4820789386457644`*^9, 3.482078969404133*^9}]
+   3.482078676963018*^9, 3.4820789386457644`*^9, 3.482078969404133*^9, 
+   3.482087367883415*^9, {3.482087400982314*^9, 3.482087428351602*^9}, 
+   3.482087682656499*^9, 3.482088273085301*^9, 3.482088436749056*^9, 
+   3.482089282091105*^9, {3.482089558000338*^9, 3.482089583817829*^9}, {
+   3.482089631625759*^9, 3.4820896471243963`*^9}, 3.4820896959968643`*^9, 
+   3.4820897785382223`*^9, 3.482091118883293*^9, 3.482091710434565*^9, 
+   3.482091825868607*^9, 3.482093071840375*^9, 3.48209343913838*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -273,7 +320,6 @@ ySx6HxlOhCv5MxrKXU5wAy9uWk37m3dCPmPIvd5E/h8D3unudY/zvzTWn+U=
     FormBox["\"Image Width\"", TraditionalForm], 
     FormBox["\"Speedup\"", TraditionalForm]},
   AxesOrigin->{100, 13},
-  ImageSize->{628., Automatic},
   PlotRange->{All, All},
   PlotRangeClipping->True,
   PlotRangePadding->{Automatic, Automatic}]], "Output",
@@ -281,7 +327,13 @@ ySx6HxlOhCv5MxrKXU5wAy9uWk37m3dCPmPIvd5E/h8D3unudY/zvzTWn+U=
    3.482033264276243*^9, 3.48203417957541*^9, 3.482034494949791*^9, {
    3.482059321373528*^9, 3.482059333860615*^9}, 3.482077844855343*^9, 
    3.482077896536215*^9, {3.4820789368725357`*^9, 3.482078938704101*^9}, {
-   3.482078969461186*^9, 3.482078976651465*^9}, 3.482079022403716*^9}]
+   3.482078969461186*^9, 3.482078976651465*^9}, 3.482079022403716*^9, 
+   3.482087367920129*^9, {3.482087403638111*^9, 3.482087428385725*^9}, 
+   3.482087682704441*^9, 3.4820882731145077`*^9, 3.482088436778432*^9, 
+   3.48208928214563*^9, {3.482089558036023*^9, 3.4820895838669167`*^9}, 
+   3.482089647154201*^9, 3.482089696031596*^9, 3.48208977857185*^9, 
+   3.482091118931905*^9, 3.482091710482356*^9, 3.4820918259037724`*^9, 
+   3.4820930718734617`*^9, 3.4820934391750507`*^9}]
 }, Open  ]],
 
 Cell[BoxData[
@@ -333,7 +385,12 @@ Cell[BoxData[
   3.4820332643805513`*^9, {3.4820341796857033`*^9, 3.482034194787776*^9}, 
    3.482034533766899*^9, {3.482059321481194*^9, 3.4820593339732103`*^9}, 
    3.482077844948352*^9, 3.482077896645582*^9, 3.482078938838854*^9, 
-   3.482078969533988*^9}]
+   3.482078969533988*^9, 3.482087368028289*^9, {3.482087403746237*^9, 
+   3.482087428448822*^9}, 3.482087682814082*^9, 3.482088273194378*^9, 
+   3.482088436856667*^9, 3.4820892822525177`*^9, {3.482089558133758*^9, 
+   3.482089583964718*^9}, 3.482089647253563*^9, 3.482089696108934*^9, 
+   3.482089778655909*^9, 3.482091119030654*^9, 3.4820917105768633`*^9, 
+   3.482091825982616*^9, 3.482093071952709*^9, 3.482093439253175*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
@@ -438,29 +495,712 @@ YeOdVXlw/toXsrP5fPLhfKUWEQ/2ZQj+dHnur///I/gAsdbW8w==
    3.482033775671422*^9, {3.482033825002759*^9, 3.482033848981963*^9}, {
    3.482034179839913*^9, 3.4820342000712957`*^9}, 3.482034489865534*^9, {
    3.482059321655959*^9, 3.482059334117867*^9}, 3.482077845110278*^9, 
-   3.482077896790489*^9, 3.482078938984316*^9, 3.482078969679171*^9}]
+   3.482077896790489*^9, 3.482078938984316*^9, 3.482078969679171*^9, 
+   3.482087368181916*^9, {3.482087403876297*^9, 3.482087428594523*^9}, 
+   3.482087682961499*^9, 3.482088273326624*^9, 3.48208843698234*^9, 
+   3.482089282403233*^9, {3.482089558276039*^9, 3.48208958410788*^9}, 
+   3.482089647397551*^9, 3.482089696224098*^9, 3.4820897787766457`*^9, 
+   3.482091119184801*^9, 3.482091710713934*^9, 3.4820918260915833`*^9, 
+   3.4820930720609922`*^9, 3.482093439379985*^9}]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+     "\"\<../paper/runtimePlot.pdf\>\""}], ",", "runtimePlot"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+     "\"\<../paper/speedupPlot.pdf\>\""}], ",", "speedupPlot"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+     "\"\<../paper/strongPlotOne.pdf\>\""}], ",", "strongPlotOne"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+     "\"\<../paper/strongPlotTwo.pdf\>\""}], ",", "strongPlotTwo"}], "]"}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.482034201597918*^9, 3.482034220245824*^9}, {
+  3.4820345027386103`*^9, 3.482034506367255*^9}, {3.4820780816417227`*^9, 
+  3.4820780895276823`*^9}, {3.482079024987442*^9, 3.482079029866914*^9}, {
+  3.4820874220384483`*^9, 3.482087427785104*^9}, {3.482089238128537*^9, 
+  3.482089281276198*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"samples", "=", 
+   RowBox[{"500", "*", "500", "*", "2000"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"gpuPerfPerDollar", "=", 
+   RowBox[{
+    RowBox[{"samples", "/", 
+     RowBox[{"Last", "[", 
+      RowBox[{"gpu", "[", 
+       RowBox[{"[", "40", "]"}], "]"}], "]"}]}], "/", "250"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cpuPerfPerDollar", "=", 
+   RowBox[{
+    RowBox[{"samples", "/", 
+     RowBox[{"Last", "[", 
+      RowBox[{"cpu", "[", 
+       RowBox[{"[", "40", "]"}], "]"}], "]"}]}], "/", "332"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"quadcpuPerfPerDollar", "=", 
+   RowBox[{
+    RowBox[{"samples", "/", 
+     RowBox[{"Last", "[", 
+      RowBox[{"quadcpu", "[", 
+       RowBox[{"[", "40", "]"}], "]"}], "]"}]}], "/", "851"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"oldcpuPerfPerDollar", "=", 
+   RowBox[{
+    RowBox[{"samples", "/", 
+     RowBox[{"Last", "[", 
+      RowBox[{"oldcpu", "[", 
+       RowBox[{"[", "40", "]"}], "]"}], "]"}]}], "/", "133"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"dollarPlot", "=", 
+  RowBox[{"BarChart", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "gpuPerfPerDollar", ",", "oldcpuPerfPerDollar", ",", "cpuPerfPerDollar", 
+      ",", "quadcpuPerfPerDollar"}], "}"}], ",", 
+    RowBox[{"ChartLabels", "\[Rule]", 
+     RowBox[{"Placed", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "\"\<4890\>\"", ",", "\"\<Core 2 Duo\\nE7200\>\"", ",", 
+         "\"\<Core i7\\n620M\>\"", ",", "\"\<Core 2 Quad\\nQ6600\>\""}], 
+        "}"}], ",", "Above"}], "]"}]}], ",", 
+    RowBox[{"ChartStyle", "\[Rule]", "\"\<DarkRainbow\>\""}], ",", 
+    RowBox[{"AxesLabel", "\[Rule]", "\"\<samp/s/$\>\""}]}], "]"}]}]}], "Input",\
+
+ CellChangeTimes->{{3.482088271657754*^9, 3.482088388953065*^9}, {
+  3.482088441038711*^9, 3.4820885146405888`*^9}, {3.482088654857893*^9, 
+  3.482088760938239*^9}, {3.482088843313463*^9, 3.482088905358823*^9}, {
+  3.482089069057335*^9, 3.4820890701811247`*^9}, {3.4820896634544888`*^9, 
+  3.482089680553652*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[{{{}, {
+     {RGBColor[0.237736, 0.340215, 0.575113], EdgeForm[Opacity[0.7]], {}, 
+      TagBox[
+       TooltipBox[
+        TagBox[{
+          DynamicBox[{
+            FrontEnd`If[
+             CurrentValue["MouseOver"], 
+             EdgeForm[{
+               GrayLevel[0.5], 
+               AbsoluteThickness[1.5], 
+               Opacity[0.66]}], {}, {}], 
+            RectangleBox[{0., 0.}, {1., 720369.5224356052}]},
+           
+           ImageSizeCache->{{33.75000000000001, 
+            147.90543426672994`}, {-144.9574049594425, 157.58715698732243`}}],
+           InsetBox[
+           StyleBox["\<\"4890\"\>",
+            StripOnInput->False,
+            FrontFaceColor->GrayLevel[0],
+            BackFaceColor->GrayLevel[0],
+            GraphicsColor->GrayLevel[0],
+            FontColor->GrayLevel[0]], 
+           Offset[{0, 4}, {0.5, 720369.5224356052}], ImageScaled[{0.5, 0}]]},
+         StatusArea[#, 720369.5224356052]& ,
+         TagBoxNote->"720369.5224356052"],
+        StyleBox["720369.5224356052`", {
+          GrayLevel[0]}, StripOnInput -> False]],
+       Annotation[#, 
+        Style[720369.5224356052, {
+          GrayLevel[0]}], "Tooltip"]& ]}, 
+     {RGBColor[
+      0.33311066666666667`, 0.5032283333333333, 0.26154733333333335`], 
+      EdgeForm[Opacity[0.7]], {}, 
+      TagBox[
+       TooltipBox[
+        TagBox[{
+          DynamicBox[{
+            FrontEnd`If[
+             CurrentValue["MouseOver"], 
+             EdgeForm[{
+               GrayLevel[0.5], 
+               AbsoluteThickness[1.5], 
+               Opacity[0.66]}], {}, {}], 
+            RectangleBox[{1.1, 0.}, {2.1, 38596.90351201146}]},
+           
+           ImageSizeCache->{{158.77097769340293`, 272.9264119601329}, {
+            140.90381711701417`, 157.58715698732243`}}], InsetBox[
+           StyleBox["\<\"Core 2 Duo\\nE7200\"\>",
+            StripOnInput->False,
+            FrontFaceColor->GrayLevel[0],
+            BackFaceColor->GrayLevel[0],
+            GraphicsColor->GrayLevel[0],
+            FontColor->GrayLevel[0]], 
+           Offset[{0, 4}, {1.6, 38596.90351201146}], ImageScaled[{0.5, 0}]]},
+         StatusArea[#, 38596.90351201146]& ,
+         TagBoxNote->"38596.90351201146"],
+        StyleBox["38596.90351201146`", {
+          GrayLevel[0]}, StripOnInput -> False]],
+       Annotation[#, 
+        Style[38596.90351201146, {
+          GrayLevel[0]}], "Tooltip"]& ]}, 
+     {RGBColor[0.8562609999999999, 0.742794, 0.31908333333333333`], EdgeForm[
+      Opacity[0.7]], {}, 
+      TagBox[
+       TooltipBox[
+        TagBox[{
+          DynamicBox[{
+            FrontEnd`If[
+             CurrentValue["MouseOver"], 
+             EdgeForm[{
+               GrayLevel[0.5], 
+               AbsoluteThickness[1.5], 
+               Opacity[0.66]}], {}, {}], 
+            RectangleBox[{2.2, 0.}, {3.2, 26870.96442873315}]},
+           
+           ImageSizeCache->{{283.79195538680585`, 397.94738965353577`}, {
+            145.82039954244547`, 157.58715698732243`}}], InsetBox[
+           StyleBox["\<\"Core i7\\n620M\"\>",
+            StripOnInput->False,
+            FrontFaceColor->GrayLevel[0],
+            BackFaceColor->GrayLevel[0],
+            GraphicsColor->GrayLevel[0],
+            FontColor->GrayLevel[0]], 
+           Offset[{0, 4}, {2.7, 26870.96442873315}], ImageScaled[{0.5, 0}]]},
+         StatusArea[#, 26870.96442873315]& ,
+         TagBoxNote->"26870.96442873315"],
+        StyleBox["26870.96442873315`", {
+          GrayLevel[0]}, StripOnInput -> False]],
+       Annotation[#, 
+        Style[26870.96442873315, {
+          GrayLevel[0]}], "Tooltip"]& ]}, 
+     {RGBColor[0.72987, 0.239399, 0.230961], EdgeForm[Opacity[0.7]], {}, 
+      TagBox[
+       TooltipBox[
+        TagBox[{
+          DynamicBox[{
+            FrontEnd`If[
+             CurrentValue["MouseOver"], 
+             EdgeForm[{
+               GrayLevel[0.5], 
+               AbsoluteThickness[1.5], 
+               Opacity[0.66]}], {}, {}], 
+            
+            RectangleBox[{3.3000000000000003`, 0.}, {4.300000000000001, 
+             14273.133906522442`}]},
+           
+           ImageSizeCache->{{408.8129330802088, 522.9683673469387}, {
+            151.10255832769707`, 157.58715698732243`}}], InsetBox[
+           StyleBox["\<\"Core 2 Quad\\nQ6600\"\>",
+            StripOnInput->False,
+            FrontFaceColor->GrayLevel[0],
+            BackFaceColor->GrayLevel[0],
+            GraphicsColor->GrayLevel[0],
+            FontColor->GrayLevel[0]], 
+           Offset[{0, 4}, {3.8000000000000007`, 14273.133906522442`}], 
+           ImageScaled[{0.5, 0}]]},
+         StatusArea[#, 14273.133906522442`]& ,
+         TagBoxNote->"14273.133906522442"],
+        StyleBox["14273.133906522442`", {
+          GrayLevel[0]}, StripOnInput -> False]],
+       Annotation[#, 
+        Style[14273.133906522442`, {
+          GrayLevel[0]}], "Tooltip"]& ]}}, {}, {}}, {}, GraphicsGroupBox[
+    StyleBox[
+     LineBox[{{{0., 0}, Offset[{0, -4}, {0., 0}]}, {{4.300000000000001, 0}, 
+        Offset[{0, -4}, {4.300000000000001, 0}]}}],
+     Antialiasing->False]]},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{True, True},
+  AxesLabel->FormBox["\"samp/s/$\"", TraditionalForm],
+  ImageSize->{534., Automatic},
+  PlotRangePadding->Scaled[0.02],
+  Ticks->{None, Automatic}]], "Output",
+ CellChangeTimes->{
+  3.4820885149854603`*^9, {3.4820886810563507`*^9, 3.482088704507134*^9}, {
+   3.482088735485509*^9, 3.482088761447689*^9}, {3.482088875933844*^9, 
+   3.48208890625905*^9}, 3.482089070706737*^9, 3.482089282749988*^9, {
+   3.48208955863774*^9, 3.482089584455146*^9}, 3.482089647738706*^9, {
+   3.482089680922467*^9, 3.4820896965654993`*^9}, 3.482089779123138*^9, 
+   3.482091119695867*^9, 3.482091711208531*^9, 3.482091826370223*^9, 
+   3.482093072406951*^9, 3.482093439711063*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+     "\"\<../paper/dollarPlot.pdf\>\""}], ",", "dollarPlot"}], "]"}], 
+  ";"}]], "Input",
+ CellChangeTimes->{{3.482088922553294*^9, 3.482088971079954*^9}, {
+   3.482089040332471*^9, 3.482089074202614*^9}, {3.482089142852268*^9, 
+   3.482089142994111*^9}, 3.482089247136333*^9}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"samples", "=", 
+   RowBox[{"500", "*", "500", "*", "2000"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"gpuPerfPerTransistor", "=", 
+   RowBox[{
+    RowBox[{"samples", "/", 
+     RowBox[{"Last", "[", 
+      RowBox[{"gpu", "[", 
+       RowBox[{"[", "40", "]"}], "]"}], "]"}]}], "/", "956"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cpuPerfPerTransistor", "=", 
+   RowBox[{
+    RowBox[{"samples", "/", 
+     RowBox[{"Last", "[", 
+      RowBox[{"cpu", "[", 
+       RowBox[{"[", "40", "]"}], "]"}], "]"}]}], "/", "382"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"quadcpuPerfPerTransistor", "=", 
+   RowBox[{
+    RowBox[{"samples", "/", 
+     RowBox[{"Last", "[", 
+      RowBox[{"quadcpu", "[", 
+       RowBox[{"[", "40", "]"}], "]"}], "]"}]}], "/", "582"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"oldcpuPerfPerTransistor", "=", 
+   RowBox[{
+    RowBox[{"samples", "/", 
+     RowBox[{"Last", "[", 
+      RowBox[{"oldcpu", "[", 
+       RowBox[{"[", "40", "]"}], "]"}], "]"}]}], "/", "228"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"transistorPlot", "=", 
+  RowBox[{"BarChart", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "gpuPerfPerTransistor", ",", "oldcpuPerfPerTransistor", ",", 
+      "cpuPerfPerTransistor", ",", "quadcpuPerfPerTransistor"}], "}"}], ",", 
+    RowBox[{"ChartLabels", "\[Rule]", 
+     RowBox[{"Placed", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "\"\<4890\>\"", ",", "\"\<Core 2 Duo\\nE7200\>\"", ",", 
+         "\"\<Core i7\\n620M\>\"", ",", "\"\<Core 2 Quad\\nQ6600\>\""}], 
+        "}"}], ",", "Above"}], "]"}]}], ",", 
+    RowBox[{"ChartStyle", "\[Rule]", "\"\<DarkRainbow\>\""}], ",", 
+    RowBox[{"AxesLabel", "\[Rule]", "\"\<samp/s/\\nM transistors\>\""}]}], 
+   "]"}]}]}], "Input",
+ CellChangeTimes->{{3.482088271657754*^9, 3.482088388953065*^9}, {
+  3.482088441038711*^9, 3.4820885146405888`*^9}, {3.482088654857893*^9, 
+  3.482088760938239*^9}, {3.482088843313463*^9, 3.482088905358823*^9}, {
+  3.482089069057335*^9, 3.4820890701811247`*^9}, {3.4820896634544888`*^9, 
+  3.482089680553652*^9}, {3.482091721204994*^9, 3.482091842392668*^9}, {
+  3.4820918833914557`*^9, 3.482091951097692*^9}, {3.482093054969672*^9, 
+  3.482093056816442*^9}, {3.482093423944421*^9, 3.482093458927902*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[{{{}, {
+     {RGBColor[0.237736, 0.340215, 0.575113], EdgeForm[Opacity[0.7]], {}, 
+      TagBox[
+       TooltipBox[
+        TagBox[{
+          DynamicBox[{
+            FrontEnd`If[
+             CurrentValue["MouseOver"], 
+             EdgeForm[{
+               GrayLevel[0.5], 
+               AbsoluteThickness[1.5], 
+               Opacity[0.66]}], {}, {}], 
+            RectangleBox[{0., 0.}, {1., 188381.15126454108`}]},
+           
+           ImageSizeCache->{{36.25, 
+            149.83590412909348`}, {-136.98893730580718`, 
+            164.04207201544781`}}], InsetBox[
+           StyleBox["\<\"4890\"\>",
+            StripOnInput->False,
+            FrontFaceColor->GrayLevel[0],
+            BackFaceColor->GrayLevel[0],
+            GraphicsColor->GrayLevel[0],
+            FontColor->GrayLevel[0]], 
+           Offset[{0, 4}, {0.5, 188381.15126454108`}], ImageScaled[{0.5, 0}]]},
+         StatusArea[#, 188381.15126454108`]& ,
+         TagBoxNote->"188381.15126454108"],
+        StyleBox["188381.15126454108`", {
+          GrayLevel[0]}, StripOnInput -> False]],
+       Annotation[#, 
+        Style[188381.15126454108`, {
+          GrayLevel[0]}], "Tooltip"]& ]}, 
+     {RGBColor[
+      0.33311066666666667`, 0.5032283333333333, 0.26154733333333335`], 
+      EdgeForm[Opacity[0.7]], {}, 
+      TagBox[
+       TooltipBox[
+        TagBox[{
+          DynamicBox[{
+            FrontEnd`If[
+             CurrentValue["MouseOver"], 
+             EdgeForm[{
+               GrayLevel[0.5], 
+               AbsoluteThickness[1.5], 
+               Opacity[0.66]}], {}, {}], 
+            RectangleBox[{1.1, 0.}, {2.1, 22514.860382006682`}]},
+           
+           ImageSizeCache->{{160.6444945420028, 274.2303986710963}, {
+            127.62333136697592`, 164.04207201544781`}}], InsetBox[
+           StyleBox["\<\"Core 2 Duo\\nE7200\"\>",
+            StripOnInput->False,
+            FrontFaceColor->GrayLevel[0],
+            BackFaceColor->GrayLevel[0],
+            GraphicsColor->GrayLevel[0],
+            FontColor->GrayLevel[0]], 
+           Offset[{0, 4}, {1.6, 22514.860382006682`}], ImageScaled[{0.5, 0}]]},
+         StatusArea[#, 22514.860382006682`]& ,
+         TagBoxNote->"22514.860382006682"],
+        StyleBox["22514.860382006682`", {
+          GrayLevel[0]}, StripOnInput -> False]],
+       Annotation[#, 
+        Style[22514.860382006682`, {
+          GrayLevel[0]}], "Tooltip"]& ]}, 
+     {RGBColor[0.8562609999999999, 0.742794, 0.31908333333333333`], EdgeForm[
+      Opacity[0.7]], {}, 
+      TagBox[
+       TooltipBox[
+        TagBox[{
+          DynamicBox[{
+            FrontEnd`If[
+             CurrentValue["MouseOver"], 
+             EdgeForm[{
+               GrayLevel[0.5], 
+               AbsoluteThickness[1.5], 
+               Opacity[0.66]}], {}, {}], 
+            RectangleBox[{2.2, 0.}, {3.2, 23353.82248779949}]},
+           
+           ImageSizeCache->{{285.0389890840056, 398.6248932130991}, {
+            126.28490591016293`, 164.04207201544781`}}], InsetBox[
+           StyleBox["\<\"Core i7\\n620M\"\>",
+            StripOnInput->False,
+            FrontFaceColor->GrayLevel[0],
+            BackFaceColor->GrayLevel[0],
+            GraphicsColor->GrayLevel[0],
+            FontColor->GrayLevel[0]], 
+           Offset[{0, 4}, {2.7, 23353.82248779949}], ImageScaled[{0.5, 0}]]},
+         StatusArea[#, 23353.82248779949]& ,
+         TagBoxNote->"23353.82248779949"],
+        StyleBox["23353.82248779949`", {
+          GrayLevel[0]}, StripOnInput -> False]],
+       Annotation[#, 
+        Style[23353.82248779949, {
+          GrayLevel[0]}], "Tooltip"]& ]}, 
+     {RGBColor[0.72987, 0.239399, 0.230961], EdgeForm[Opacity[0.7]], {}, 
+      TagBox[
+       TooltipBox[
+        TagBox[{
+          DynamicBox[{
+            FrontEnd`If[
+             CurrentValue["MouseOver"], 
+             EdgeForm[{
+               GrayLevel[0.5], 
+               AbsoluteThickness[1.5], 
+               Opacity[0.66]}], {}, {}], 
+            
+            RectangleBox[{3.3000000000000003`, 0.}, {4.300000000000001, 
+             20870.166588403088`}]},
+           
+           ImageSizeCache->{{409.43348362600847`, 523.019387755102}, {
+            130.24716863783948`, 164.04207201544781`}}], InsetBox[
+           StyleBox["\<\"Core 2 Quad\\nQ6600\"\>",
+            StripOnInput->False,
+            FrontFaceColor->GrayLevel[0],
+            BackFaceColor->GrayLevel[0],
+            GraphicsColor->GrayLevel[0],
+            FontColor->GrayLevel[0]], 
+           Offset[{0, 4}, {3.8000000000000007`, 20870.166588403088`}], 
+           ImageScaled[{0.5, 0}]]},
+         StatusArea[#, 20870.166588403088`]& ,
+         TagBoxNote->"20870.166588403088"],
+        StyleBox["20870.166588403088`", {
+          GrayLevel[0]}, StripOnInput -> False]],
+       Annotation[#, 
+        Style[20870.166588403088`, {
+          GrayLevel[0]}], "Tooltip"]& ]}}, {}, {}}, {}, GraphicsGroupBox[
+    StyleBox[
+     LineBox[{{{0., 0}, Offset[{0, -4}, {0., 0}]}, {{4.300000000000001, 0}, 
+        Offset[{0, -4}, {4.300000000000001, 0}]}}],
+     Antialiasing->False]]},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{True, True},
+  AxesLabel->FormBox["\"samp/s/\\nmillion transistors\"", TraditionalForm],
+  ImageSize->{534., Automatic},
+  PlotRangePadding->Scaled[0.02],
+  Ticks->{None, Automatic}]], "Output",
+ CellChangeTimes->{
+  3.4820885149854603`*^9, {3.4820886810563507`*^9, 3.482088704507134*^9}, {
+   3.482088735485509*^9, 3.482088761447689*^9}, {3.482088875933844*^9, 
+   3.48208890625905*^9}, 3.482089070706737*^9, 3.482089282749988*^9, {
+   3.48208955863774*^9, 3.482089584455146*^9}, 3.482089647738706*^9, {
+   3.482089680922467*^9, 3.4820896965654993`*^9}, 3.482089779123138*^9, 
+   3.482091119695867*^9, 3.482091711208531*^9, {3.482091826511013*^9, 
+   3.482091842937154*^9}, {3.482091891084991*^9, 3.4820919516455793`*^9}, 
+   3.4820930725447693`*^9, 3.482093439864766*^9}]
 }, Open  ]],
 
 Cell[CellGroupData[{
 
-Cell[BoxData[
- RowBox[{"Export", "[", 
-  RowBox[{"\"\<speedupPlot.pdf\>\"", ",", "speedupPlot"}], "]"}]], "Input",
- CellChangeTimes->{{3.482034201597918*^9, 3.482034220245824*^9}, {
-  3.4820345027386103`*^9, 3.482034506367255*^9}, {3.4820780816417227`*^9, 
-  3.4820780895276823`*^9}, {3.482079024987442*^9, 3.482079029866914*^9}}],
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"samples", "=", 
+   RowBox[{"500", "*", "500", "*", "2000"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"gpuPerfPerWatt", "=", 
+   RowBox[{
+    RowBox[{"samples", "/", 
+     RowBox[{"Last", "[", 
+      RowBox[{"gpu", "[", 
+       RowBox[{"[", "40", "]"}], "]"}], "]"}]}], "/", "285"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"cpuPerfPerWatt", "=", 
+   RowBox[{
+    RowBox[{"samples", "/", 
+     RowBox[{"Last", "[", 
+      RowBox[{"cpu", "[", 
+       RowBox[{"[", "40", "]"}], "]"}], "]"}]}], "/", "64.7"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"quadcpuPerfPerWatt", "=", 
+   RowBox[{
+    RowBox[{"samples", "/", 
+     RowBox[{"Last", "[", 
+      RowBox[{"quadcpu", "[", 
+       RowBox[{"[", "40", "]"}], "]"}], "]"}]}], "/", "90"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"oldcpuPerfPerWatt", "=", 
+   RowBox[{
+    RowBox[{"samples", "/", 
+     RowBox[{"Last", "[", 
+      RowBox[{"oldcpu", "[", 
+       RowBox[{"[", "40", "]"}], "]"}], "]"}]}], "/", "60"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{"wattPlot", "=", 
+  RowBox[{"BarChart", "[", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{
+     "gpuPerfPerWatt", ",", "oldcpuPerfPerWatt", ",", "cpuPerfPerWatt", ",", 
+      "quadcpuPerfPerWatt"}], "}"}], ",", 
+    RowBox[{"ChartLabels", "\[Rule]", 
+     RowBox[{"Placed", "[", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{
+        "\"\<4890\>\"", ",", "\"\<Core 2 Duo\\nE7200\>\"", ",", 
+         "\"\<Core i7\\n620M\>\"", ",", "\"\<Core 2 Quad\\nQ6600\>\""}], 
+        "}"}], ",", "Above"}], "]"}]}], ",", 
+    RowBox[{"ChartStyle", "\[Rule]", "\"\<DarkRainbow\>\""}], ",", 
+    RowBox[{"AxesLabel", "\[Rule]", "\"\<samp/s/watt\>\""}]}], 
+   "]"}]}]}], "Input",
+ CellChangeTimes->{{3.482088271657754*^9, 3.482088388953065*^9}, {
+  3.482088441038711*^9, 3.4820885146405888`*^9}, {3.482088654857893*^9, 
+  3.482088760938239*^9}, {3.482088843313463*^9, 3.482088905358823*^9}, {
+  3.482089069057335*^9, 3.4820890701811247`*^9}, {3.4820896634544888`*^9, 
+  3.482089680553652*^9}, {3.482091721204994*^9, 3.482091842392668*^9}, {
+  3.4820918833914557`*^9, 3.4820919899891376`*^9}, {3.482092128507978*^9, 
+  3.482092144728758*^9}, {3.482092325203829*^9, 3.482092329807478*^9}, {
+  3.4820925390188217`*^9, 3.4820925397292147`*^9}, {3.4820926584376173`*^9, 
+  3.48209265936763*^9}, {3.482092739257574*^9, 3.482092739781534*^9}, {
+  3.482093046409504*^9, 3.4820930467765512`*^9}, {3.4820932364287863`*^9, 
+  3.482093254837215*^9}}],
 
-Cell[BoxData["\<\"speedupPlot.pdf\"\>"], "Output",
- CellChangeTimes->{{3.482034214576268*^9, 3.4820342206416283`*^9}, {
-   3.482034501515204*^9, 3.482034536301401*^9}, {3.48205932190875*^9, 
-   3.482059334226166*^9}, 3.482077845319974*^9, 3.482077896899774*^9, {
-   3.4820780871001883`*^9, 3.4820780898408003`*^9}, 3.482078172306946*^9, 
-   3.48207868035824*^9, 3.482078939098941*^9, 3.482078969785891*^9, 
-   3.4820790302913647`*^9}]
-}, Open  ]]
+Cell[BoxData[
+ GraphicsBox[{{{}, {
+     {RGBColor[0.237736, 0.340215, 0.575113], EdgeForm[Opacity[0.7]], {}, 
+      TagBox[
+       TooltipBox[
+        TagBox[{
+          DynamicBox[{
+            FrontEnd`If[
+             CurrentValue["MouseOver"], 
+             EdgeForm[{
+               GrayLevel[0.5], 
+               AbsoluteThickness[1.5], 
+               Opacity[0.66]}], {}, {}], 
+            RectangleBox[{0., 0.}, {1., 631903.089855794}]},
+           
+           ImageSizeCache->{{33.75, 147.9054342667299}, {-144.95740495944244`,
+             157.58715698732243`}}], InsetBox[
+           StyleBox["\<\"4890\"\>",
+            StripOnInput->False,
+            FrontFaceColor->GrayLevel[0],
+            BackFaceColor->GrayLevel[0],
+            GraphicsColor->GrayLevel[0],
+            FontColor->GrayLevel[0]], Offset[{0, 4}, {0.5, 631903.089855794}],
+            ImageScaled[{0.5, 0}]]},
+         StatusArea[#, 631903.089855794]& ,
+         TagBoxNote->"631903.089855794"],
+        StyleBox["631903.089855794`", {
+          GrayLevel[0]}, StripOnInput -> False]],
+       Annotation[#, 
+        Style[631903.089855794, {
+          GrayLevel[0]}], "Tooltip"]& ]}, 
+     {RGBColor[
+      0.33311066666666667`, 0.5032283333333333, 0.26154733333333335`], 
+      EdgeForm[Opacity[0.7]], {}, 
+      TagBox[
+       TooltipBox[
+        TagBox[{
+          DynamicBox[{
+            FrontEnd`If[
+             CurrentValue["MouseOver"], 
+             EdgeForm[{
+               GrayLevel[0.5], 
+               AbsoluteThickness[1.5], 
+               Opacity[0.66]}], {}, {}], 
+            RectangleBox[{1.1, 0.}, {2.1, 85556.4694516254}]},
+           
+           ImageSizeCache->{{158.77097769340293`, 272.9264119601329}, {
+            116.19185713505345`, 157.58715698732243`}}], InsetBox[
+           StyleBox["\<\"Core 2 Duo\\nE7200\"\>",
+            StripOnInput->False,
+            FrontFaceColor->GrayLevel[0],
+            BackFaceColor->GrayLevel[0],
+            GraphicsColor->GrayLevel[0],
+            FontColor->GrayLevel[0]], Offset[{0, 4}, {1.6, 85556.4694516254}],
+            ImageScaled[{0.5, 0}]]},
+         StatusArea[#, 85556.4694516254]& ,
+         TagBoxNote->"85556.4694516254"],
+        StyleBox["85556.4694516254`", {
+          GrayLevel[0]}, StripOnInput -> False]],
+       Annotation[#, 
+        Style[85556.4694516254, {
+          GrayLevel[0]}], "Tooltip"]& ]}, 
+     {RGBColor[0.8562609999999999, 0.742794, 0.31908333333333333`], EdgeForm[
+      Opacity[0.7]], {}, 
+      TagBox[
+       TooltipBox[
+        TagBox[{
+          DynamicBox[{
+            FrontEnd`If[
+             CurrentValue["MouseOver"], 
+             EdgeForm[{
+               GrayLevel[0.5], 
+               AbsoluteThickness[1.5], 
+               Opacity[0.66]}], {}, {}], 
+            RectangleBox[{2.2, 0.}, {3.2, 137885.0106698517}]},
+           
+           ImageSizeCache->{{283.79195538680585`, 397.94738965353577`}, {
+            91.17923801147965, 157.58715698732243`}}], InsetBox[
+           StyleBox["\<\"Core i7\\n620M\"\>",
+            StripOnInput->False,
+            FrontFaceColor->GrayLevel[0],
+            BackFaceColor->GrayLevel[0],
+            GraphicsColor->GrayLevel[0],
+            FontColor->GrayLevel[0]], 
+           Offset[{0, 4}, {2.7, 137885.0106698517}], ImageScaled[{0.5, 0}]]},
+         StatusArea[#, 137885.0106698517]& ,
+         TagBoxNote->"137885.0106698517"],
+        StyleBox["137885.0106698517`", {
+          GrayLevel[0]}, StripOnInput -> False]],
+       Annotation[#, 
+        Style[137885.0106698517, {
+          GrayLevel[0]}], "Tooltip"]& ]}, 
+     {RGBColor[0.72987, 0.239399, 0.230961], EdgeForm[Opacity[0.7]], {}, 
+      TagBox[
+       TooltipBox[
+        TagBox[{
+          DynamicBox[{
+            FrontEnd`If[
+             CurrentValue["MouseOver"], 
+             EdgeForm[{
+               GrayLevel[0.5], 
+               AbsoluteThickness[1.5], 
+               Opacity[0.66]}], {}, {}], 
+            
+            RectangleBox[{3.3000000000000003`, 0.}, {4.300000000000001, 
+             134960.41060500665`}]},
+           
+           ImageSizeCache->{{408.8129330802088, 522.9683673469387}, {
+            92.57717316900073, 157.58715698732243`}}], InsetBox[
+           StyleBox["\<\"Core 2 Quad\\nQ6600\"\>",
+            StripOnInput->False,
+            FrontFaceColor->GrayLevel[0],
+            BackFaceColor->GrayLevel[0],
+            GraphicsColor->GrayLevel[0],
+            FontColor->GrayLevel[0]], 
+           Offset[{0, 4}, {3.8000000000000007`, 134960.41060500665`}], 
+           ImageScaled[{0.5, 0}]]},
+         StatusArea[#, 134960.41060500665`]& ,
+         TagBoxNote->"134960.41060500665"],
+        StyleBox["134960.41060500665`", {
+          GrayLevel[0]}, StripOnInput -> False]],
+       Annotation[#, 
+        Style[134960.41060500665`, {
+          GrayLevel[0]}], "Tooltip"]& ]}}, {}, {}}, {}, GraphicsGroupBox[
+    StyleBox[
+     LineBox[{{{0., 0}, Offset[{0, -4}, {0., 0}]}, {{4.300000000000001, 0}, 
+        Offset[{0, -4}, {4.300000000000001, 0}]}}],
+     Antialiasing->False]]},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{True, True},
+  AxesLabel->FormBox["\"samp/s/watt\"", TraditionalForm],
+  ImageSize->{534., Automatic},
+  PlotRangePadding->Scaled[0.02],
+  Ticks->{None, Automatic}]], "Output",
+ CellChangeTimes->{
+  3.4820885149854603`*^9, {3.4820886810563507`*^9, 3.482088704507134*^9}, {
+   3.482088735485509*^9, 3.482088761447689*^9}, {3.482088875933844*^9, 
+   3.48208890625905*^9}, 3.482089070706737*^9, 3.482089282749988*^9, {
+   3.48208955863774*^9, 3.482089584455146*^9}, 3.482089647738706*^9, {
+   3.482089680922467*^9, 3.4820896965654993`*^9}, 3.482089779123138*^9, 
+   3.482091119695867*^9, 3.482091711208531*^9, {3.482091826511013*^9, 
+   3.482091842937154*^9}, {3.482091891084991*^9, 3.4820919516455793`*^9}, 
+   3.482092660044442*^9, 3.4820927401097383`*^9, 3.4820930726045713`*^9, {
+   3.4820932379581347`*^9, 3.482093255157238*^9}, 3.482093439920678*^9}]
+}, Open  ]],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+     "\"\<../paper/transistorPlot.pdf\>\""}], ",", "transistorPlot"}], "]"}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+     "\"\<../paper/wattPlot.pdf\>\""}], ",", "wattPlot"}], "]"}], 
+  ";"}]}], "Input",
+ CellChangeTimes->{{3.482093061438818*^9, 3.482093070533133*^9}}]
 },
-WindowSize->{811, 1006},
-WindowMargins->{{Automatic, 164}, {Automatic, 0}},
+WindowSize->{811, 647},
+WindowMargins->{{Automatic, 15}, {Automatic, 0}},
 FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (November 10, 2008)",
 StyleDefinitions->"Default.nb"
 ]
@@ -475,28 +1215,39 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[545, 20, 1351, 31, 58, "Input"],
+Cell[545, 20, 1637, 39, 73, "Input"],
 Cell[CellGroupData[{
-Cell[1921, 55, 2007, 45, 118, "Input"],
-Cell[3931, 102, 5047, 92, 378, "Output"]
+Cell[2207, 63, 2350, 52, 133, "Input"],
+Cell[4560, 117, 6954, 124, 378, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[9015, 199, 1703, 42, 73, "Input"],
-Cell[10721, 243, 2104, 40, 382, "Output"]
+Cell[11551, 246, 1703, 42, 73, "Input"],
+Cell[13257, 290, 2482, 45, 218, "Output"]
 }, Open  ]],
-Cell[12840, 286, 308, 8, 27, "Input"],
+Cell[15754, 338, 308, 8, 27, "Input"],
 Cell[CellGroupData[{
-Cell[13173, 298, 639, 13, 43, "Input"],
-Cell[13815, 313, 965, 22, 378, "Output"]
-}, Open  ]],
-Cell[CellGroupData[{
-Cell[14817, 340, 1662, 43, 88, "Input"],
-Cell[16482, 385, 2911, 55, 375, "Output"]
+Cell[16087, 350, 639, 13, 43, "Input"],
+Cell[16729, 365, 1367, 27, 378, "Output"]
 }, Open  ]],
 Cell[CellGroupData[{
-Cell[19430, 445, 330, 5, 27, "Input"],
-Cell[19763, 452, 434, 6, 27, "Output"]
-}, Open  ]]
+Cell[18133, 397, 1662, 43, 88, "Input"],
+Cell[19798, 442, 3317, 61, 375, "Output"]
+}, Open  ]],
+Cell[23130, 506, 1205, 33, 73, "Input"],
+Cell[CellGroupData[{
+Cell[24360, 543, 2103, 58, 148, "Input"],
+Cell[26466, 603, 5824, 142, 350, "Output"]
+}, Open  ]],
+Cell[32305, 748, 405, 10, 27, "Input"],
+Cell[CellGroupData[{
+Cell[32735, 762, 2348, 60, 163, "Input"],
+Cell[35086, 824, 5930, 143, 362, "Output"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[41053, 972, 2534, 64, 133, "Input"],
+Cell[43590, 1038, 5964, 143, 350, "Output"]
+}, Open  ]],
+Cell[49569, 1184, 507, 15, 43, "Input"]
 }
 ]
 *)

@@ -38,6 +38,8 @@ asdfasdfadsf asdf adsf asdf asdf adfasdf adsf adf asfd
 
 \section{Physics}
 
+All of the equations below are borrowed from \cite{quantumBook}, but have been slightly modified to fit our purposes, as discussed in section \ref{simpSection}.
+
 \subsection{Schr\"{o}dinger's Equation}
 
 From \cite{quantumBook}, we find the single-electron solution to Schr\"{o}dinger's equation:
@@ -107,21 +109,27 @@ Our implementation is twofold: an OpenCL kernel (written in the C-like OpenCL ke
 
 \subsection{Simplifications}
 
+\label{simpSection}
+
 The decision was made during the implementation phase to redefine the Bohr radius so that $a=1$; this was done in order to keep intermediate numbers within the range of single-precision floating point values, as OpenCL doesn't currently support native double-precision math on any of the GPUs available for benchmarking. Since we're only using this software to generate visualizations, this doesn't affect the output; it simply scales the distances away from the atomic level. The equations above have $a=1$ already substituted in, for brevity.
 
-To keep the implementation of this algorithm within the scope of this project, we also decided to use a fixed-camera orthogonal projection. This worked to significantly simplify the process of iteration over all of the samples, as with this restriction, the program simply has to iterate over all of the pixels in the image, evaluating $n$ points in the $z$ dimension for each pixel, without worrying about complex transformations between coordinate systems.
+To keep the implementation of this algorithm within the scope of this project, we also decided to use a fixed-camera orthogonal projection. This worked to significantly simplify the process of iteration over all of the samples, as with this restriction, the program simply has to iterate over all of the pixels in the image, evaluating many points in the $z$ dimension for each pixel, without worrying about complex transformations between coordinate systems.
+
+\subsection{Evaluation}
+
+For each pixel in the image, we spawn an instance of our OpenCL kernel which evaluates 2000 samples in the $z$ dimension. Each sample represents the value of the density function, $\psi$, at that point in space (the cartesian coordinates of the image have to be converted into spherical coordinates in order to evaluate $\psi$). All 2000 samples are summed and stored into their respective pixel in the image buffer.
+
+Once computation has completed, the buffer is copied back from video memory to system memory (or, if the program was running on the CPU, this step is skipped --- this is the primary overhead incurred by the use of GPU computation). There, pixel values are scaled linearly so that the brightest pixel is 100\% white.
 
 \section{Hardware}
 
 Benchmarks will be performed on a number of different computation devices across a few different computers:
 
-\subsection{GPUs}
+\subsection{GPU}
 
 \begin{itemize}
 
 \item ATI Radeon 4890, 800$\times$850MHz, 1GB, 250\$\footnote{All hardware prices listed are approximate launch prices. Prices of older hardware, especially the Core 2 Quad, have dropped significantly since introduction.\label{fn:prices}}\footnote{Tested on Windows, with ATI Stream SDK\label{fn:windows}}
-
-\item NVIDIA GeForce 8600M GT, 32$\times$475MHz, 512MB, ???\$\footref{fn:prices}\footnote{Tested on Mac OS X, with Apple OpenCL\label{fn:osx}}
 
 \end{itemize}
 
@@ -129,7 +137,7 @@ Benchmarks will be performed on a number of different computation devices across
 
 \begin{itemize}
 
-\item Intel Core i7 620M, 2$\times$3333MHz, 4GB, 332\$\footref{fn:prices}\footref{fn:osx}
+\item Intel Core i7 620M, 2$\times$3333MHz, 4GB, 332\$\footref{fn:prices}\footnote{Tested on Mac OS X, with Apple OpenCL\label{fn:osx}}
 
 \item Intel Core 2 Quad Q6600, 4$\times$3000MHz, 4GB, 851\$\footref{fn:prices}\footnote{Tested on Linux, with ATI Stream SDK\label{fn:linux}}
 
@@ -173,17 +181,35 @@ One can see in figure \ref{fig:strongPlotTwo} that this implementation is strong
 
 \begin{figure}
     \includegraphics[width=84.5mm]{speedupPlot.pdf}
-    \caption{Speedup of fastest GPU over fastest CPU as resolution increases; larger values are better}
+    \caption{Speedup of fastest GPU (4890) over fastest CPU (Core 2 Quad) as resolution increases; larger values are better}
     \label{fig:speedupPlot}
 \end{figure}
 
-As one can see in \ref{fig:runtimePlot}, both GPUs significantly outperform all of the CPUs
+As one can see in figure \ref{fig:runtimePlot}, the GPU significantly outperforms all of the CPUs. This is not surprising, as it can perform more than an order of magnitude more parallel computations, but it does validate the premise of this experiment.
 
 Figure \ref{fig:speedupPlot} shows that our implementation converges to an approximately 14.7x speedup (between the fastest of each class of hardware, namely, the 4890 and Core 2 Quad) as the resolution of the output image increases. Noise in the speedup values with smaller images is likely due to measurement error and the overhead and unpredictability involved when copying data to/from video memory.
 
 It should be noted that these speedup values are across different pieces of hardware at different core clock speeds, and, as such, do not represent the actual parallel speedup gained (for that, look at section \ref{strongScaling}). This is, instead, a representation of the performance potentially gained by moving computation to the GPU.
 
 \subsection{Cost Effectiveness of Hardware}
+
+\begin{figure}
+    \includegraphics[width=84.5mm]{dollarPlot.pdf}
+    \caption{Samples per second per dollar with a fixed resolution ($500\times500$); larger values are better}
+    \label{fig:costEffectiveness}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=84.5mm]{transistorPlot.pdf}
+    \caption{Samples per second per million transistors with a fixed resolution ($500\times500$); larger values are better}
+    \label{fig:transistorPlot}
+\end{figure}
+
+\begin{figure}
+    \includegraphics[width=84.5mm]{wattPlot.pdf}
+    \caption{Samples per second per heavy-load watt with a fixed resolution ($500\times500$); larger values are better}
+    \label{fig:wattPlot}
+\end{figure}
 
 \section{Future Work}
 
