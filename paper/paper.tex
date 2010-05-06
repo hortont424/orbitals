@@ -117,9 +117,17 @@ To keep the implementation of this algorithm within the scope of this project, w
 
 \subsection{Evaluation}
 
+After arguments have been parsed and an OpenCL context has been created, we create a buffer large enough to store the entirety of the resultant image, and also compute the constant term of $\psi$, both of which are passed to each instance of the kernel.
+
 For each pixel in the image, we spawn an instance of our OpenCL kernel which evaluates 2000 samples in the $z$ dimension. Each sample represents the value of the density function, $\psi$, at that point in space (the cartesian coordinates of the image have to be converted into spherical coordinates in order to evaluate $\psi$). All 2000 samples are summed and stored into their respective pixel in the image buffer.
 
 Once computation has completed, the buffer is copied back from video memory to system memory (or, if the program was running on the CPU, this step is skipped --- this is the primary overhead incurred by the use of GPU computation). There, pixel values are scaled linearly so that the brightest pixel is 100\% white.
+
+\subsection{Complex Math}
+
+The OpenCL specification unfortunately currently does not include complex math primitives, which are necessary for the evaluation of $\psi$. It does reserve the {\bf complex} keyword, which suggests that perhaps support for something similar to GCC's complex type is coming in a future version of OpenCL, which would put it on ground more similar to CUDA.
+
+In order to solve this problem, we implemented a small library of complex math functions which make use of the OpenCL {\bf float2} type to store complex numbers. This library includes various complex number constructors, as well as exponentiation, multiplication, square root, the exponential function, and conjugation. These functions are used extensively within the evaluation of $\psi$.
 
 \section{Hardware}
 
@@ -159,13 +167,13 @@ In order to measure the strong scalability of our implementation, we fix the pro
 
 \begin{figure}
     \includegraphics[width=84.5mm]{strongPlotOne.pdf}
-    \caption{Core Count vs. Runtime on the 4890 with a fixed resolution ($400\times400$); smaller values are better}
+    \caption{Runtime as core count increases on the 4890 with a fixed resolution ($400\times400$); smaller values are better}
     \label{fig:strongPlotOne}
 \end{figure}
 
 \begin{figure}
     \includegraphics[width=84.5mm]{strongPlotTwo.pdf}
-    \caption{Core Count vs. Speedup (measured against the single-core run) on the 4890 with a fixed resolution ($400\times400$); the orange line is the theoretical maximum speedup, given linear scaling and 50 execution units (800 cores / 16 cores per unit); the red line is a linear speedup curve; larger values are better}
+    \caption{Speedup as core count increases (measured against the single-core run) on the 4890 with a fixed resolution ($400\times400$); the orange line is the theoretical maximum speedup, given linear scaling and 50 execution units (800 cores / 16 cores per unit); the red line is a linear speedup curve; larger values are better}
     \label{fig:strongPlotTwo}
 \end{figure}
 
@@ -210,6 +218,8 @@ It should be noted that these speedup values are across different pieces of hard
     \caption{Samples per second per heavy-load watt with a fixed resolution ($500\times500$); larger values are better}
     \label{fig:wattPlot}
 \end{figure}
+
+One oft-cited measure of the performance of a computational device is its {\it performance-per-dollar}; this is especially of interest for consumers with budgets or people building large computation clusters. In order to measure performance-per-dollar, we have to define {\it performance} in the context of our problem. In all of the plots in this section, performance is measured as the number of samples per second. Figures \ref{fig:costEffectiveness}, \ref{fig:transistorPlot}, and \ref{fig:wattPlot} all use a 500$\times$500 image, with 2000 samples per pixel, for $500,000,000$ total samples.
 
 \section{Future Work}
 
