@@ -123,7 +123,7 @@ After arguments have been parsed and an OpenCL context has been created, we crea
 
 For each pixel in the image, we spawn an instance of our OpenCL kernel which evaluates 2000 samples in the $z$ dimension. Each sample represents the value of the density function, $\psi$, at that point in space (the cartesian coordinates of the image have to be converted into spherical coordinates in order to evaluate $\psi$). All 2000 samples are summed and stored into their respective pixel in the image buffer.
 
-Once computation has completed, the buffer is copied back from video memory to system memory (or, if the program was running on the CPU, this step is skipped --- this is the primary overhead incurred by the use of GPU computation). There, pixel values are scaled linearly so that the brightest pixel is 100\% white.
+Once computation has completed, the buffer is copied back from working memory (either video memory or system memory) to the final image buffer in system memory. Once there, pixel values are scaled linearly so that the brightest pixel is 100\% white.
 
 \subsection{Complex Math}
 
@@ -169,7 +169,7 @@ Three computers have spent countless hours performing calculations to bring you 
 
 In order to measure the strong scalability of our implementation, we fix the problem size and vary the number of processing units used to compute it. For this benchmark, we will fix the image at $400\times400$ pixels, requiring $320,000,000$ total samples, and we will vary the number of cores of the 4890 that we use.
 
-One can see in figure \ref{fig:strongPlotTwo} that this implementation is strongly scalable; the speedup is almost perfectly linear as the core count increases. It should be noted that since the 4890 only has a maximum of 50 compute units, the linear increase is only maintained until we reach 50 cores; after that, the performance gains plateau as they should.
+One can see in figure \ref{fig:strongPlotTwo} that this implementation is strongly scalable; the speedup is almost perfectly linear as the core count increases. It should be noted that since --- for our kernel --- the 4890 only has 50 compute units, the linear increase is only maintained until we reach 50 cores; after that, the performance gains plateau as they should.
 
 \begin{figure}
     \includegraphics[width=84.5mm]{strongPlotOne.pdf}
@@ -191,9 +191,9 @@ One can see in figure \ref{fig:strongPlotTwo} that this implementation is strong
     \label{fig:overheadPlot}
 \end{figure}
 
-The algorithm we implemented for this project required no communication between  cores whatsoever during the course of the computation. The primary overhead involved in the entire process is the single copy of the $n\times n$ output buffer from video memory into system memory, where it is then normalized, compressed, and output (we don't consider these parts of the process when measuring performance or overhead, as they're written in Python, a language not known for its performance characteristics).
+The algorithm we implemented for this project required no communication between  cores whatsoever during the course of the computation. The primary overhead involved in the entire process is the single copy of the $n\times n$ output buffer from working memory into system memory, where it is then normalized, compressed, and output (we don't consider these parts of the process when measuring performance or overhead, as they're written in Python, a language not known for its performance characteristics).
 
-The
+The overhead incurred during this copy can be seen in the chart in figure \ref{fig:overheadPlot} to be negligible --- in the range of a ten-thousandth of a percent of the total runtime when working on the GPU, and a one-hundred-thousandth of a percent when working on the CPU, where the data has a shorter distance to travel.
 
 \subsection{Large- vs. Small-scale Parallelism}
 
@@ -221,12 +221,6 @@ It should be noted that these speedup values are across different pieces of hard
     \includegraphics[width=84.5mm]{dollarPlot.pdf}
     \caption{Samples per second per dollar with a fixed resolution ($500\times500$); larger values are better}
     \label{fig:costEffectiveness}
-\end{figure}
-
-\begin{figure}
-    \includegraphics[width=84.5mm]{transistorPlot.pdf}
-    \caption{Samples per second per million transistors with a fixed resolution ($500\times500$); larger values are better}
-    \label{fig:transistorPlot}
 \end{figure}
 
 \begin{figure}
