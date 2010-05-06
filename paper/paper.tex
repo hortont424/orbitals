@@ -89,7 +89,7 @@ $Y$ depends on an additional external function, $P$, the Legendre polynomial (eq
 
 Key to the evaluation of Schr\"{o}dinger's equation are the Laguerre and Legendre polynomials. Unfortunately, the generation of both requires symbolically solving differential equations. \cite{legendreCite} Since OpenCL (rightfully) lacks a symbolic differential equation solver (and the implementation of such a program is far outside of the scope of this project), we have added to our kernel a simple table of the first few polynomials, computed with Mathematica. This limits the range of input $n, l, m$ parameters which can be used with this program, but extending the tables is very simple and requires only patience.
 
-The generating differential equations for these polynomials are as follows:
+The generating equations for these polynomials are as follows:
 
 \begin{equation}\label{laguerre}
 L^\alpha_n\left(x\right)=\frac{x^{-\alpha}e^x}{n!}\frac{d^n}{dx^n}\left(e^{-x}x^{n+\alpha}\right),
@@ -101,7 +101,7 @@ P^u_v\left(z\right)=\frac{\left(1+z\right)^{\mu/2}}{\left(1-z\right)^{\mu/2}}
 \left(-v,v+1;1-\mu;\frac{1-z}{2}\right),
 \end{equation}
 
-where $\tilde{F}$ is Gauss' hypergeometric function, which we don't care about since we're simply allowing Mathematica to evaluate it and using the comparatively simple symbolic results in our table.
+where $\tilde{F}$ is Gauss' hypergeometric function, which we don't need to bother ourselves with since we're simply allowing Mathematica to evaluate it and using the comparatively simple symbolic results in our table.
 
 \section{Implementation}
 
@@ -161,13 +161,15 @@ Also, it should be noted that while each core on a given CPU could potentially b
 
 \section{Results}
 
-Each benchmark point is the minimum of five trials.
+Three computers have spent countless hours performing calculations to bring you the following results, as each benchmark point is the minimum of five individual trials.
 
 \subsection{Strong Scaling}
 
 \label{strongScaling}
 
 In order to measure the strong scalability of our implementation, we fix the problem size and vary the number of processing units used to compute it. For this benchmark, we will fix the image at $400\times400$ pixels, requiring $320,000,000$ total samples, and we will vary the number of cores of the 4890 that we use.
+
+One can see in figure \ref{fig:strongPlotTwo} that this implementation is strongly scalable; the speedup is almost perfectly linear as the core count increases. It should be noted that since the 4890 only has a maximum of 50 compute units, the linear increase is only maintained until we reach 50 cores; after that, the performance gains plateau as they should.
 
 \begin{figure}
     \includegraphics[width=84.5mm]{strongPlotOne.pdf}
@@ -181,8 +183,6 @@ In order to measure the strong scalability of our implementation, we fix the pro
     \label{fig:strongPlotTwo}
 \end{figure}
 
-One can see in figure \ref{fig:strongPlotTwo} that this implementation is strongly scalable; the speedup is almost perfectly linear as the core count increases. It should be noted that since the 4890 only has a maximum of 50 compute units, the linear increase is only maintained until we reach 50 cores; after that, the performance gains plateau as they should.
-
 \subsection{Large- vs. Small-scale Parallelism}
 
 \begin{figure}
@@ -191,13 +191,13 @@ One can see in figure \ref{fig:strongPlotTwo} that this implementation is strong
     \label{fig:runtimePlot}
 \end{figure}
 
+As one can see in figure \ref{fig:runtimePlot}, the GPU significantly outperforms all of the CPUs. This is not surprising, as it can perform more than an order of magnitude more parallel computations, but it does validate the premise of this experiment.
+
 \begin{figure}
     \includegraphics[width=84.5mm]{speedupPlot.pdf}
     \caption{Speedup of fastest GPU (4890) over fastest CPU (Core 2 Quad) as resolution increases; larger values are better}
     \label{fig:speedupPlot}
 \end{figure}
-
-As one can see in figure \ref{fig:runtimePlot}, the GPU significantly outperforms all of the CPUs. This is not surprising, as it can perform more than an order of magnitude more parallel computations, but it does validate the premise of this experiment.
 
 Figure \ref{fig:speedupPlot} shows that our implementation converges to an approximately 14.7x speedup (between the fastest of each class of hardware, namely, the 4890 and Core 2 Quad) as the resolution of the output image increases. Noise in the speedup values with smaller images is likely due to measurement error and the overhead and unpredictability involved when copying data to/from video memory.
 
@@ -231,7 +231,7 @@ Another important point when considering the cost of various pieces of hardware 
 
 \section{Future Work}
 
-There are quite a few things which have come up while developing this project that would be interesting to implement if we were to continue work on the codebase.
+There are quite a few things which have come up while developing this project that would be interesting to implement if we were to continue work on the codebase. We will discuss a few of these below:
 
 \subsection{Camera Transformation}
 
@@ -249,11 +249,21 @@ In addition, if the number of samples was sufficiently reduced, or a fast enough
     \label{fig:slice}
 \end{figure}
 
-Section \ref{cameraTransformation} covered the ideal solution to the problem of comprehending the shape of the orbital from our 2D representation --- however, if that solution proved to be too challenging, one could instead generate an animation of slices through the cloud, each slice being similar to figure \ref{fig:slice}
+Section \ref{cameraTransformation} covered the ideal solution to the problem of comprehending the shape of the orbital from our 2D representation --- however, if that solution proved to be too challenging, one could instead generate an animation of slices through the cloud, each slice being similar to figure \ref{fig:slice}. This would provide another form of interesting visualization of the resulting data.
 
 \subsection{Coloring}
 
+A third way to make the visualization more appealing (or even more informative) would be to provide some manner of colorization. One potential algorithm would be to colorize each sample based on its depth in $z$; the resulting image would then have more depth information, which might increase the ease with which it is interpreted. A variety of other coloring functions are possible, but none were pursued during this project, for time's sake.
+
 \subsection{Generalization of Parameters}
+
+Equations \ref{laguerre} and \ref{legendre} provide a generalized way to construct Laguerre and Legendre polynomials, respectively. However, our implementation does not make use of these functions, instead using a table of simplified solutions, generated with Mathematica, which is limited in scope.
+
+The length of the table determines the range of $n, l, m$ values which can be passed into our program, and is the only restriction on generality within our implementation. If one were to construct these functions on the fly from their generating equations, the algorithm would be completely generalized in terms of $n, l, m$, and would be significantly more useful from an exploratory standpoint.
+
+However, as discussed in section \ref{laguerreLegendre}, this would require (at least) the implementation of a symbolic differential equation solver in OpenCL, which could potentially be a very time-consuming task (it could also increase the number of GPU stream processors per kernel required, significantly decreasing the speedup gained).
+
+Alternatively, one could write a translation program to automatically generate the table from Mathematica, removing the slow, error-prone human translation step, and very quickly expand the size of the table to something more useful.
 
 \section{Conclusion}
 
