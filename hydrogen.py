@@ -37,13 +37,14 @@ def renderOrbitals((ni, li, mi), imageResolution):
 
     # Evaluate the rest of psi once for each pixel, copy into output buffer
     before = time()
-    main.prg.density(main.queue, [pointCount], ipsi, n, l, m, outputBuffer, res)
+    main.prg.density(main.queue, [pointCount], ipsi, n, l, m, outputBuffer, res).wait()
+    computeDuration = time() - before
     cl.enqueue_read_buffer(main.queue, outputBuffer, output).wait()
-    duration = time() - before
+    copyDuration = time() - before - computeDuration
 
     outputBuffer.release()
 
-    return (output, duration)
+    return (output, (computeDuration, copyDuration))
 
 def exportImage(output):
     """Export a visual representation of the computed density of the
@@ -63,18 +64,20 @@ def exportImage(output):
 def benchmark(skip, params=(3,2,0)):
     """Time computation of the image at various different resolutions"""
     for res in range(100,1010,skip):
-        minDuration = 100000000
+        minComputeDuration = 100000000
+        minCopyDuration = 100000000
 
         for itr in range(5):
-            (output, duration) = renderOrbitals(params, res)
+            (output, (computeDur, copyDur)) = renderOrbitals(params, res)
             if max(output) > 0.0:
-                minDuration = min(minDuration, duration)
+                minComputeDuration = min(minComputeDuration, computeDur)
+                minCopyDuration = min(minCopyDuration, copyDur)
 
         # At some resolutions, on my mobile GPU, I get a totally black image
         # I have no idea why this happens, but this sits here to discard
         # those results, since their timing seems to be somewhat inaccurate.
-        if minDuration:
-            print "{0},{1}".format(res, minDuration)
+        if minComputeDuration < 100000000:
+            print "{0},{1},{2}".format(res, minComputeDuration, minCopyDuration)
 
 def main():
     # Parse commandline arguments
@@ -128,12 +131,12 @@ def main():
     elif options.longBenchmark:
         benchmark(10, params=params)
     elif options.onebench:
-        (output, duration) = renderOrbitals(params, int(options.res))
-        print "{0},{1}".format(options.res, duration)
+        (output, (computeD, copyD)) = renderOrbitals(params, int(options.res))
+        print "{0},{1},{2}".format(options.res, computeD, copyD)
     else:
-        (output, duration) = renderOrbitals(params, int(options.res))
+        (output, (computeD, copyD)) = renderOrbitals(params, int(options.res))
         exportImage(output)
-        print duration
+        print computeD, copyD
 
 if __name__ == "__main__":
     sys.exit(main())

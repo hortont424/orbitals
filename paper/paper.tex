@@ -183,6 +183,12 @@ One can see in figure \ref{fig:strongPlotTwo} that this implementation is strong
     \label{fig:strongPlotTwo}
 \end{figure}
 
+\subsection{Communication Overhead}
+
+The algorithm we implemented for this project required no communication between  cores whatsoever during the course of the computation. The primary overhead involved in the entire process is the single copy of the $n\times n$ output buffer from video memory into system memory, where it is then normalized, compressed, and output (we don't consider these parts of the process when measuring performance or overhead, as they're written in Python, a language not known for its performance characteristics).
+
+The
+
 \subsection{Large- vs. Small-scale Parallelism}
 
 \begin{figure}
