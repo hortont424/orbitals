@@ -185,6 +185,12 @@ One can see in figure \ref{fig:strongPlotTwo} that this implementation is strong
 
 \subsection{Communication Overhead}
 
+\begin{figure}
+    \includegraphics[width=84.5mm]{overheadPlot.pdf}
+    \caption{Overhead from image buffer copy as a percentage of the total runtime, lower numbers are better}
+    \label{fig:overheadPlot}
+\end{figure}
+
 The algorithm we implemented for this project required no communication between  cores whatsoever during the course of the computation. The primary overhead involved in the entire process is the single copy of the $n\times n$ output buffer from video memory into system memory, where it is then normalized, compressed, and output (we don't consider these parts of the process when measuring performance or overhead, as they're written in Python, a language not known for its performance characteristics).
 
 The
