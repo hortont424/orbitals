@@ -208,8 +208,7 @@ Complex Y(int m, int l, float theta, float phi)
     return cmul(root, eiStuff);
 }
 
-__kernel void density(float ipsi,
-                      int n, int l,
+__kernel void density(int n, int l,
                       int m, __global float * output,
                       int resolution)
 {
@@ -250,7 +249,7 @@ __kernel void density(float ipsi,
         psi = cmul(cmul(cexp(cnewf(-(r / n * a))),
                         cnewf(pow((float)(2.0f * r) / (n * a), (float)l))),
                    cnewf(L(2 * l + 1, n - l - 1, ((2.0f * r) / (n * a)))));
-        psi = cmul(cmul(psi, Y(m, l, theta, phi)), cnewf(ipsi));
+        psi = cmul(psi, Y(m, l, theta, phi));
 
         // Normalize psi
         psiStarPsi = cmul(cconj(psi), psi).x;

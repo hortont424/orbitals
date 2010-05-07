@@ -9,13 +9,6 @@ from time import time
 from PIL import Image
 from optparse import OptionParser
 
-def independentPsi(n, l):
-    """The first term of psi is constant with respect to the entire image, so
-    it can be computed outside of the inner loop."""
-    rootFirst = (2.0 / n) ** 3
-    rootSecond = factorial(n - l - 1.0) / (2.0 * ((n * factorial(n + l)) ** 3))
-    return sqrt(rootFirst * rootSecond)
-
 def renderOrbitals((ni, li, mi), imageResolution):
     """Create various buffers to shuttle data to/from the CPU/GPU, then
     execute the kernel for each pixel in the input image, and copy the
@@ -32,12 +25,9 @@ def renderOrbitals((ni, li, mi), imageResolution):
     outputBuffer = cl.Buffer(main.ctx, mf.READ_WRITE | mf.COPY_HOST_PTR,
                              hostbuf=output)
 
-    # Evaluate first term of psi once for entire image
-    ipsi = numpy.float32(independentPsi(n, l))
-
     # Evaluate the rest of psi once for each pixel, copy into output buffer
     before = time()
-    main.prg.density(main.queue, [pointCount], ipsi, n, l, m, outputBuffer, res).wait()
+    main.prg.density(main.queue, [pointCount], n, l, m, outputBuffer, res).wait()
     computeDuration = time() - before
     cl.enqueue_read_buffer(main.queue, outputBuffer, output).wait()
     copyDuration = time() - before - computeDuration
