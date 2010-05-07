@@ -24,16 +24,6 @@
 
 The realm of physics provides many readily parallelizable algorithms --- often involving the simple evaluation of a function at an enormous number of points in space --- which also happen to produce attractive visualizations. One such visualization is that of the probability distribution of the single electron within a hydrogen atom (or He$^+$, Li$^{2+}$, and so on). By evaluating Schr\"{o}dinger's equation at millions of points, one can construct a representation of the likely location of the electron --- the orbital cloud, if you will. Luckily, the evaluation of this function at a particular point is entirely independent of nearby points, so it is effectively perfect for parallelization. We will use OpenCL to develop and benchmark (on a varied array of hardware, from dated CPUs to very modern GPUs) an implementation of this algorithm which will produce a simple --- but attractive --- image of the atomic orbital of the single-electron hydrogen atom.
 
-\section{Introduction}
-
-asdfasdfadsf asdf adsf asdf asdf adfasdf adsf adf asfd
-
-asdfasdfadsf asdf adsf asdf asdf adfasdf adsf adf asfd
-
-asdfasdfadsf asdf adsf asdf asdf adfasdf adsf adf asfd
-
-asdfasdfadsf asdf adsf asdf asdf adfasdf adsf adf asfd
-
 \section{Physics}
 
 All of the equations below are borrowed from \cite{quantumBook}, but have been slightly modified to fit our purposes, as discussed in section \ref{simpSection}.
@@ -56,9 +46,11 @@ Y_l^m\left(\theta,\phi\right),
     \frac{\left(n-l-1\right)!}{2n\left[\left(n+l\right)!\right]^3}}.
 \end{equation}
 
+This is the fundamental formula involved in our computation --- it is this equation which we evaluate at each sample. The result of this equation gives the probability that the single electron of our hydrogen atom is at the particular chosen location in the spherical coordinate system, $\left(\theta, \phi, r\right)$, which is the information that we eventually aim to plot.
+
 One will notice that $\psi_c$ is independent of the coordinates of evaluation, $\left(\theta, \phi, r\right)$, so it --- as an obvious optimization --- can be computed once and cached for the entire image.
 
-Also, $\psi$ depends on two external functions: $Y$, the spherical harmonic equation (equation \ref{yFunc}), and $L$, the Laguerre polynomial (equation \ref{laguerre}).
+Also, $\psi$ depends on two external functions: $Y$, the spherical harmonic equation (equation \ref{yFunc}), and $L$, the Laguerre polynomial (equation \ref{laguerre}), which will be detailed in sections \ref{sphericalHarmonics} and \ref{laguerreLegendre}, respectively.
 
 \subsection{Spherical Harmonics}
 
@@ -193,7 +185,7 @@ One can see in figure \ref{fig:strongPlotTwo} that this implementation is strong
 
 The algorithm we implemented for this project required no communication between  cores whatsoever during the course of the computation. The primary overhead involved in the entire process is the single copy of the $n\times n$ output buffer from working memory into system memory, where it is then normalized, compressed, and output (we don't consider these parts of the process when measuring performance or overhead, as they're written in Python, a language not known for its performance characteristics).
 
-The overhead incurred during this copy can be seen in the chart in figure \ref{fig:overheadPlot} to be negligible --- in the range of a ten-thousandth of a percent of the total runtime when working on the GPU, and a one-hundred-thousandth of a percent when working on the CPU, where the data has a shorter distance to travel.
+The overhead incurred during this copy can be seen in the chart in figure \ref{fig:overheadPlot} to be negligible --- in the range of a tenth of a percent of the total runtime when working on the GPU, and a one-hundred-thousandth of a percent when working on the CPU, where the data has a shorter distance to travel.
 
 \subsection{Large- vs. Small-scale Parallelism}
 
@@ -229,7 +221,7 @@ It should be noted that these speedup values are across different pieces of hard
     \label{fig:wattPlot}
 \end{figure}
 
-One oft-cited measure of the performance of a computational device is its {\it performance-per-dollar}; this is especially of interest for consumers with budgets or people building large computation clusters. In order to measure performance-per-dollar, we have to define {\it performance} in the context of our problem. In all of the plots in this section, performance is measured as the number of samples per second. Figures \ref{fig:costEffectiveness}, \ref{fig:transistorPlot}, and \ref{fig:wattPlot} all use a 500$\times$500 image, with 2000 samples per pixel, for $500,000,000$ total samples.
+One oft-cited measure of the performance of a computational device is its {\it performance-per-dollar}; this is especially of interest for consumers with budgets or people building large computation clusters. In order to measure performance-per-dollar, we have to define {\it performance} in the context of our problem. In all of the plots in this section, performance is measured as the number of samples per second. Figures \ref{fig:costEffectiveness} and \ref{fig:wattPlot} all use a 500$\times$500 image, with 2000 samples per pixel, for $500,000,000$ total samples.
 
 Figure \ref{fig:costEffectiveness} illustrates the performance-per-dollar of our four devices. As is quite evident already, the 4890 --- though in the same price range as most of the other devices, and significantly cheaper than the Core 2 Quad --- manages to dominate the chart. It's safe to say that if an institution is looking into buying a large number of a particular device for scientific computation, they should seriously consider looking into high-end graphics cards. Indeed; each dollar spent on a 4890 goes 18 times farther, performance-wise, than it would if spent on the next-most-cost-effective chip, the Core 2 Duo E7200.
 
@@ -255,7 +247,11 @@ In addition, if the number of samples was sufficiently reduced, or a fast enough
     \label{fig:slice}
 \end{figure}
 
-Section \ref{cameraTransformation} covered the ideal solution to the problem of comprehending the shape of the orbital from our 2D representation --- however, if that solution proved to be too challenging, one could instead generate an animation of slices through the cloud, each slice being similar to figure \ref{fig:slice}. This would provide another form of interesting visualization of the resulting data.
+Section \ref{cameraTransformation} covered the ideal solution to the problem of comprehending the shape of the orbital from our 2D representation --- however, if that solution proved to be too challenging, one could instead generate an animation of slices through the cloud, each slice being similar to figure \ref{fig:slice}. This would provide another form of interesting visualization of the resulting data, rather similar to the data collected by an MRI device.
+
+\subsection{Automatic Scaling}
+
+Our OpenCL kernel currently contains an arbitrary zoom factor which needs to be adjusted based on the orbital configuration --- higher energy electron states lead to larger probability clouds. Automatically generating this zoom factor would lead to significantly improved ease of use when changing between different configurations. This could most effectively be implemented by finding a formula for a reasonable scale factor given a set of $n, l, m$ values.
 
 \subsection{Coloring}
 
@@ -272,6 +268,8 @@ However, as discussed in section \ref{laguerreLegendre}, this would require (at 
 Alternatively, one could write a translation program to automatically generate the table from Mathematica, removing the slow, error-prone human translation step, and very quickly expand the size of the table to something more useful.
 
 \section{Conclusion}
+
+After consuming many computer-hours computing the 3-2-0 orbital repeatedly, I've come to a few clear conclusions. Firstly, scientific computation --- the calculation of atomic orbitals, at the very least --- should clearly be a prime target for 
 
 \section{Code}
 
