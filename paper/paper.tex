@@ -267,9 +267,17 @@ However, as discussed in section \ref{laguerreLegendre}, this would require (at 
 
 Alternatively, one could write a translation program to automatically generate the table from Mathematica, removing the slow, error-prone human translation step, and very quickly expand the size of the table to something more useful.
 
+\subsection{Multiple Electrons}
+
+Another feature that would be incredibly cool to implement would be simulation of atoms with more than one electron. In this case, interference between the electrons changes the pattern to be significantly more complex (and much more interesting, as well). It's also a good bit more complex to compute: there is no exact solution of the Schr\"{o}dinger's equation for multiple electrons. Instead, an implementation would depend on a numerical differential equation solver, which would significantly affect performance.
+
 \section{Conclusion}
 
-After consuming many computer-hours computing the 3-2-0 orbital repeatedly, I've come to a few clear conclusions. Firstly, scientific computation --- the calculation of atomic orbitals, at the very least --- should clearly be a prime target for 
+After consuming many computer-hours computing the 3-2-0 orbital repeatedly, we've come to a few clear conclusions. Firstly, scientific computation --- the calculation of atomic orbitals, at the very least --- should clearly be a prime target for porting to parallel computation on the GPU, as the field takes off. Projects like Folding@Home are already taking advantage of this (besides being massively parallel, as a web-distributed project) by providing ATI Stream SDK and CUDA ports of their client, and the last few years have seen an explosion in other such projects.
+
+We've also found that --- for problems which are embarrassingly easy to parallelize, like this one --- it's very easy to implement your problem using OpenCL. We've used MPI and pthreads in the past, and it seems that OpenCL (perhaps because it's a more modern API) is a bit easier to use in terms of implementation. The added benefit of kernels running on a wider array of hardware (not just the CPU, like MPI, but on the GPU as well) means that OpenCL is a no-brainer --- at least for this sort of simple project. It's quite likely that a problem requiring a large amount of inter-kernel communication would be better suited by something with more communications primitives, like MPI.
+
+
 
 \section{Code}
 
