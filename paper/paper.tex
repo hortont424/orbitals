@@ -26,6 +26,8 @@ The realm of physics provides many readily parallelizable algorithms --- often i
 
 \section{Physics}
 
+Quantum mechanics --- since Louis de Broglie's paper {\it Research on Quantum Theory} --- tells us that matter behaves sometimes as a wave, and other times as a particle. The electron in a hydrogen atom is no different: when it isn't being observed, it doesn't exist at a particular point in space, but instead expands as a wave. The atomic orbital cloud which we're plotting here is actually simply a plot of the density of that wave at all points surrounding the atom's nucleus.
+
 All of the equations below are borrowed from \cite{quantumBook}, but have been slightly modified to fit our purposes, as discussed in section \ref{simpSection}.
 
 \subsection{Schr\"{o}dinger's Equation}
@@ -49,6 +51,8 @@ Y_l^m\left(\theta,\phi\right),
 This is the fundamental formula involved in our computation --- it is this equation which we evaluate at each sample. The result of this equation gives the probability that the single electron of our hydrogen atom is at the particular chosen location in the spherical coordinate system, $\left(\theta, \phi, r\right)$, which is the information that we eventually aim to plot.
 
 One will notice that $\psi_c$ is independent of the coordinates of evaluation, $\left(\theta, \phi, r\right)$, so it --- as an obvious optimization --- can be computed once and cached for the entire image.
+
+Indeed, while all of the benchmarks in this paper were done with $\psi_c$ included, one might notice that --- since it's a constant term across the entire image, and we're scaling the image by {\it another} constant scale factor --- that it doesn't actually affect the visualization, and can be entirely discarded. It appears that discarding the overhead required to pass this value in as an argument to each of the kernel instances and to multiply it into the value of $\psi$ gives a performance increase of between 6 and 10 percent: quite a significant improvement for no change in output!
 
 Also, $\psi$ depends on two external functions: $Y$, the spherical harmonic equation (equation \ref{yFunc}), and $L$, the Laguerre polynomial (equation \ref{laguerre}), which will be detailed in sections \ref{sphericalHarmonics} and \ref{laguerreLegendre}, respectively.
 
@@ -115,7 +119,7 @@ After arguments have been parsed and an OpenCL context has been created, we crea
 
 For each pixel in the image, we spawn an instance of our OpenCL kernel which evaluates 2000 samples in the $z$ dimension. Each sample represents the value of the density function, $\psi$, at that point in space (the cartesian coordinates of the image have to be converted into spherical coordinates in order to evaluate $\psi$). All 2000 samples are summed and stored into their respective pixel in the image buffer.
 
-Once computation has completed, the buffer is copied back from working memory (either video memory or system memory) to the final image buffer in system memory. Once there, pixel values are scaled linearly so that the brightest pixel is 100\% white.
+Once computation has completed, the buffer is copied back from working memory (either video memory or system memory) to the final image buffer in system memory. Once there, pixel values are scaled linearly so that the brightest pixel is 100\% white, and the image is compressed to PNG and saved to the filesystem.
 
 \subsection{Complex Math}
 
@@ -155,13 +159,21 @@ Also, it should be noted that while each core on a given CPU could potentially b
 
 Three computers have spent countless hours performing calculations to bring you the following results, as each benchmark point is the minimum of five individual trials.
 
+\subsection{Communication Overhead}
+
+\begin{figure}
+    \includegraphics[width=84.5mm]{overheadPlot.pdf}
+    \caption{Overhead from image buffer copy as a percentage of the total runtime; smaller values are better}
+    \label{fig:overheadPlot}
+\end{figure}
+
+The algorithm we implemented for this project required no communication between  cores whatsoever during the course of the computation. The primary overhead involved in the entire process is the single copy of the $n\times n$ output buffer from working memory into system memory, where it is then normalized, compressed, and output (we don't consider these parts of the process when measuring performance or overhead, as they're written in Python, a language not known for its performance characteristics).
+
+The overhead incurred during this copy can be seen in the chart in figure \ref{fig:overheadPlot} to be negligible --- in the range of a tenth of a percent of the total runtime when working on the GPU, and a one-hundred-thousandth of a percent when working on the CPU, where the data has a shorter distance to travel.
+
 \subsection{Strong Scaling}
 
 \label{strongScaling}
-
-In order to measure the strong scalability of our implementation, we fix the problem size and vary the number of processing units used to compute it. For this benchmark, we will fix the image at $400\times400$ pixels, requiring $320,000,000$ total samples, and we will vary the number of cores of the 4890 that we use.
-
-One can see in figure \ref{fig:strongPlotTwo} that this implementation is strongly scalable; the speedup is almost perfectly linear as the core count increases. It should be noted that since --- for our kernel --- the 4890 only has 50 compute units, the linear increase is only maintained until we reach 50 cores; after that, the performance gains plateau as they should.
 
 \begin{figure}
     \includegraphics[width=84.5mm]{strongPlotOne.pdf}
@@ -175,17 +187,9 @@ One can see in figure \ref{fig:strongPlotTwo} that this implementation is strong
     \label{fig:strongPlotTwo}
 \end{figure}
 
-\subsection{Communication Overhead}
+In order to measure the strong scalability of our implementation, we fix the problem size and vary the number of processing units used to compute it. For this benchmark, we will fix the image at $400\times400$ pixels, requiring $320,000,000$ total samples, and we will vary the number of cores of the 4890 that we use.
 
-\begin{figure}
-    \includegraphics[width=84.5mm]{overheadPlot.pdf}
-    \caption{Overhead from image buffer copy as a percentage of the total runtime, lower numbers are better}
-    \label{fig:overheadPlot}
-\end{figure}
-
-The algorithm we implemented for this project required no communication between  cores whatsoever during the course of the computation. The primary overhead involved in the entire process is the single copy of the $n\times n$ output buffer from working memory into system memory, where it is then normalized, compressed, and output (we don't consider these parts of the process when measuring performance or overhead, as they're written in Python, a language not known for its performance characteristics).
-
-The overhead incurred during this copy can be seen in the chart in figure \ref{fig:overheadPlot} to be negligible --- in the range of a tenth of a percent of the total runtime when working on the GPU, and a one-hundred-thousandth of a percent when working on the CPU, where the data has a shorter distance to travel.
+One can see in figure \ref{fig:strongPlotTwo} that this implementation is strongly scalable; the speedup is almost perfectly linear as the core count increases. It should be noted that since --- for our kernel --- the 4890 only has 50 compute units, the linear increase is only maintained until we reach 50 cores; after that, the performance gains plateau as they should.
 
 \subsection{Large- vs. Small-scale Parallelism}
 
@@ -275,7 +279,8 @@ Another feature that would be incredibly cool to implement would be simulation o
 
 After consuming many computer-hours computing the 3-2-0 orbital repeatedly, we've come to a few clear conclusions. Firstly, scientific computation --- the calculation of atomic orbitals, at the very least --- should clearly be a prime target for porting to parallel computation on the GPU, as the field takes off. Projects like Folding@Home are already taking advantage of this (besides being massively parallel, as a web-distributed project) by providing ATI Stream SDK and CUDA ports of their client, and the last few years have seen an explosion in other such projects.
 
-We've also found that --- for problems which are embarrassingly easy to parallelize, like this one --- it's very easy to implement your problem using OpenCL. We've used MPI and pthreads in the past, and it seems that OpenCL (perhaps because it's a more modern API) is a bit easier to use in terms of implementation. The added benefit of kernels running on a wider array of hardware (not just the CPU, like MPI, but on the GPU as well) means that OpenCL is a no-brainer --- at least for this sort of simple project. It's quite likely that a problem requiring a large amount of inter-kernel communication would be better suited by something with more communications primitives, like MPI.
+We've also found that --- for problems which are embarrassingly easy to parallelize, like this one --- it's very easy to implement your problem using OpenCL. We've used MPI and pthreads in the past, and it seems that OpenCL (perhaps because it's a more modern API) is a bit easier to use in terms of implementation. The added benefit of kernels running on a wider array of hardware (not just the CPU, like MPI, but on the GPU as well) means that OpenCL is a no-brainer --- at least for this sort of simple project. It's quite likely that a problem requiring a large amount of inter-kernel communication would be better suited by something with more communications primitives, like MPI. Indeed, besides {\it barrier}, OpenCL doesn't seem to have any manner of inter-kernel communications functions.
+
 
 
 
