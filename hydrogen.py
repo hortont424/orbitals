@@ -27,7 +27,7 @@ def renderOrbitals((ni, li, mi), imageResolution):
 
     # Evaluate the rest of psi once for each pixel, copy into output buffer
     before = time()
-    main.prg.density(main.queue, [pointCount], n, l, m, outputBuffer, res).wait()
+    main.prg.density(main.queue, [pointCount], None, n, l, m, outputBuffer, res).wait()
     computeDuration = time() - before
     cl.enqueue_read_buffer(main.queue, outputBuffer, output).wait()
     copyDuration = time() - before - computeDuration
